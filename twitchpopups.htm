@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="tmi.min.js"></script>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Open Sans Condensed:700">
+
+	<style>
+		#popuptext {
+		    display: inline-block;
+			font-family: 'Open Sans Condensed';
+			font-weight: 700;
+			color: white;
+			font-size: 60px;
+			margin: 0;
+			margin-left: 15px;
+			white-space: nowrap;
+		}
+
+		#popupbox {
+			position: absolute;
+			bottom: 20px;
+            left: 20px;
+			width: 0px;
+			height: 82px;
+			overflow: hidden;
+			background-color: #00AA00;
+		}
+		
+	</style>
+
+</head>
+
+<body>
+
+	<div id="popupbox">
+	    <h1 id="popuptext"></h1>		
+	</div>
+
+</body>
+    
+<script type="text/javascript">
+
+    // Define configuration options
+    const opts = {
+        channels: [
+          "Limmy"
+        ]
+    };
+
+    // Create a client with our options
+    let client = new tmi.client(opts);
+
+    // Register our event handlers (defined below)
+    client.on('message', onMessageHandler);
+    client.on('connected', onConnectedHandler);
+
+    // Connect to Twitch:
+    client.connect();
+
+    //
+    //
+    // =========
+    // ANIMATION
+    // =========    
+    
+
+    // Hotseat stuff
+    var hotseatuser = "";
+    var hotseatison = false;
+    //
+    
+    // Called every time a message comes in
+    function onMessageHandler(target, context, msg, self) {
+        // Remove whitespace from chat message
+        const commandName = msg.trim();
+        
+        // If the command is known, let's execute it
+
+            if (context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))) {
+                if (commandName.startsWith("!alert ")) {
+                    $("#popupbox").show();
+                    $("#popupbox").css({"background-color":"#00AA00"}); 
+                    $("#popuptext").text(commandName.substr(7).toUpperCase());
+                    doAnimation();
+                } else if (commandName.startsWith("!delete")) {
+                  deleteAnimation();
+                } else if (commandName.startsWith("!hotseat ")) {
+                  hotseatison = true;
+                  $("#popupbox").show();
+                  hotseatuser = commandName.substr(10).toLowerCase();
+                  $("#popupbox").css({"background-color":"#aa1100"}); 
+                  $("#popuptext").text("🔥 " + hotseatuser.toUpperCase() + " IS IN THE HOTSEAT 🔥");
+                  doAnimation();
+                }
+            }
+                
+            if (hotseatison) {
+                if (context.username == hotseatuser){
+                    $("#popuptext").text("🔥 " + context['display-name'] + ": " + commandName + " 🔥");
+                    doHotseatAnimation();
+                }
+            }
+                
+    }
+        
+    // Animate text
+    function doAnimation() {
+        var textWidth = $("#popuptext").width();
+        $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
+        $("#popupbox").width(1);
+        $("#popupbox").animate({width:textWidth+30}, 500);
+        $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
+    }
+    
+    function doHotseatAnimation() {
+        var textWidth = $("#popuptext").width();
+        $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
+        $("#popupbox").css({"background-color":"#aa1100"}); 
+        $("#popupbox").width(1);
+        $("#popupbox").animate({width:textWidth+30}, 500);
+        $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
+    }
+    
+    
+        
+    // Animate off
+    function deleteAnimation() {
+        hotseatison = false;
+        $("#popupbox").animate({width:0}, 500);
+        $("#popuptext").animate({"opacity":0, "margin-left":"50px"}, 700);
+    }
+    
+
+    function onConnectedHandler(addr, port) {
+        console.log(`* Connected to ${addr}:${port}`);
+    }
+</script>
+</html>
