@@ -7,5 +7,7 @@ COMMAND LIST:
 - !delete: will delete the popup
 
 INSTRUCTIONS
-1. Edit twitchpopups.htm and change "Limmy" to your Twitch channel name
-2. Use OBS/Streamlabs OBS to add twitchpopups.htm as a browser source (Fit to Screen, 1920x1080)
+1. Download the [latest TwitchPopups archive](https://github.com/DaftLimmy/TwitchPopups/archive/master.zip) and extract to your PC
+2. Edit twitchpopups.htm and change "Limmy" to your Twitch channel name
+3. Use OBS/Streamlabs OBS to add twitchpopups.htm as a browser source (Fit to Screen, 1920x1080)
+
