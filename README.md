@@ -24,5 +24,6 @@ The latest TwitchPopups version can be found [as a zip archive here](https://git
 1. Open your existing twitchpopups.htm and copy your configuration settings
 2. Download the latest version
 3. Open the zip archive and open the TwitchPopups-master directory
-4. Select all of the files and drag them over your existing TwitchPopups directory. Say yes to any prompts to overwrite files.
+4. Select all of the files and drag them into your existing TwitchPopups directory. Say yes to any prompts to overwrite files.
 5. Edit the configuration section at the top of twitchpopups.htm, pasting in your settings from step 1.
+6. If OBS hasn't recognised the update press the "refresh cache of current page" button in browser source properties.
