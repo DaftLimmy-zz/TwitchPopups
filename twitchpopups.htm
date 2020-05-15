@@ -16,11 +16,17 @@
         // The emoji that surrounds the hotseat messages.
         const hotseatEmoji = '🔥';
 
+        // Hotseat profanity protection
+        const enableProfanityFilter = false;
+        const pfAllowedWords = ['example'];
+        const pfBannedWords = [];
+
         // Follow the instructions in README.md
-        
+
     </script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="badwords.js"></script>
     <script src="jquery-3.4.1.min.js"></script>
     <script src="tmi.min.js"></script>
     <link rel="stylesheet"
@@ -46,7 +52,7 @@
 			height: 82px;
 			overflow: hidden;
 		}
-		
+
 	</style>
 
 </head>
@@ -54,17 +60,29 @@
 <body>
 
 	<div id="popupbox">
-	    <h1 id="popuptext"></h1>		
+	    <h1 id="popuptext"></h1>
 	</div>
 
 </body>
-    
+
 <script type="text/javascript">
     const opts = {
         channels: [
             twitchChannel
         ]
     };
+
+    if (enableProfanityFilter) {
+        var filter = new Filter();
+
+        pfBannedWords.forEach(element => {
+            filter.addWords(element);
+        });
+
+        pfAllowedWords.forEach(element => {
+            filter.removeWords(element);
+        });
+    }
 
     // Create a client with our options defined at the top of the file
     let client = new tmi.client(opts);
@@ -80,75 +98,75 @@
     //
     // =========
     // ANIMATION
-    // =========    
-    
+    // =========
+
 
     // Hotseat stuff
     let hotSeatUser = "";
     let hotSeatIsOn = false;
     //
-    
+
     // Called every time a message comes in
     function onMessageHandler(target, context, msg, self) {
         // Remove whitespace from chat message
         const commandName = msg.trim();
-        
-        // If the command is known, let's execute it
 
-            if (context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))) {
-                if (commandName.startsWith("!alert ")) {
-                    $("#popupbox").show();
-                    $("#popupbox").css({"background-color":alertBg}); 
-                    $("#popuptext").text(commandName.substr(7).toUpperCase());
-                    doAnimation();
-                } else if (commandName.startsWith("!delete")) {
-                  deleteAnimation();
-                } else if (commandName.startsWith("!hotseat ")) {
-                  hotSeatIsOn = true;
-                  $("#popupbox").show();
-                  hotSeatUser = commandName.substr(10).toLowerCase();
-                  $("#popupbox").css({"background-color":hotseatBg}); 
-                  $("#popuptext").text(`${hotseatEmoji}  ${hotSeatUser.toUpperCase()} IS IN THE HOTSEAT ${hotseatEmoji}`);
-                  doAnimation();
-                }
+        // If the command is known, let's execute it
+        if (context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))) {
+            if (commandName.startsWith("!alert ")) {
+                $("#popupbox").show();
+                $("#popupbox").css({"background-color":alertBg});
+                $("#popuptext").text(commandName.substr(7).toUpperCase());
+                doAnimation();
+            } else if (commandName.startsWith("!delete")) {
+                deleteAnimation();
+            } else if (commandName.startsWith("!hotseat ")) {
+                hotSeatIsOn = true;
+                $("#popupbox").show();
+                hotSeatUser = commandName.substr(10).toLowerCase();
+                $("#popupbox").css({"background-color":hotseatBg});
+                $("#popuptext").text(`${hotseatEmoji}  ${hotSeatUser.toUpperCase()} IS IN THE HOTSEAT ${hotseatEmoji}`);
+                doAnimation();
             }
-                
-            if (hotSeatIsOn) {
-                if (context.username == hotSeatUser){
-                    $("#popuptext").text(`${hotseatEmoji} ${context['display-name']}: ${commandName} ${hotseatEmoji}`);
-                    doHotseatAnimation();
-                }
+        }
+
+        if (hotSeatIsOn && context.username == hotSeatUser) {
+            var hotseatMsg = commandName;
+            if (enableProfanityFilter) {
+                hotseatMsg = filter.clean(hotseatMsg);
             }
-                
+            $("#popuptext").text(`${hotseatEmoji} ${context['display-name']}: ${hotseatMsg} ${hotseatEmoji}`);
+            doHotseatAnimation();
+        }
     }
-        
+
     // Animate text
     const doAnimation = () => {
         const textWidth = $("#popuptext").width();
-        $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
+        $("#popuptext").css({"opacity":0, "margin-left":"50px"});
         $("#popupbox").width(1);
         $("#popupbox").animate({width:textWidth+30}, 500);
         $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
     }
-    
+
     const doHotseatAnimation = () => {
         const textWidth = $("#popuptext").width();
-        $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
-        $("#popupbox").css({"background-color":hotseatBg}); 
+        $("#popuptext").css({"opacity":0, "margin-left":"50px"});
+        $("#popupbox").css({"background-color":hotseatBg});
         $("#popupbox").width(1);
         $("#popupbox").animate({width:textWidth+30}, 500);
         $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
     }
-    
-    
-        
+
+
+
     // Animate off
     const deleteAnimation = () => {
         hotSeatIsOn = false;
         $("#popupbox").animate({width:0}, 500);
         $("#popuptext").animate({"opacity":0, "margin-left":"50px"}, 700);
     }
-    
+
 
     function onConnectedHandler (addr, port) {
         console.log(`* Connected to ${addr}:${port}`);
