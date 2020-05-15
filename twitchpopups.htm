@@ -1,6 +1,25 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+
+    <script type="text/javascript">
+
+        // Change Limmy to your Twitch channel
+        var twitchChannel = 'Limmy';
+
+        // Your alert background. Default is a vibrant green
+        var alertBg = '#00AA00';
+
+        // Hotseat background colour. Default is a fiery, fiery orange.
+        var hotseatBg = '#aa1100';
+
+        // The emoji that surrounds the hotseat messages.
+        var hotseatEmoji = '🔥';
+
+        // Follow the instructions in README.md
+        
+    </script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="jquery-3.4.1.min.js"></script>
     <script src="tmi.min.js"></script>
@@ -26,7 +45,6 @@
 			width: 0px;
 			height: 82px;
 			overflow: hidden;
-			background-color: #00AA00;
 		}
 		
 	</style>
@@ -42,11 +60,9 @@
 </body>
     
 <script type="text/javascript">
-
-    // Define configuration options
     const opts = {
         channels: [
-          "Limmy"
+            twitchChannel
         ]
     };
 
@@ -84,22 +100,22 @@
             if (commandName.startsWith("!alert ")) {
                 popupbox.show();
                 popupText.text(commandName.substr(7).toUpperCase());
-                doAnimation("#00AA00");
+                doAnimation(alertBg);
             } else if (commandName.startsWith("!delete")) {
                 deleteAnimation();
             } else if (commandName.startsWith("!hotseat ")) {
                 hotseatison = true;
                 popupbox.show();
                 hotseatuser = commandName.substr(10).toLowerCase();
-                popupText.text("🔥 " + hotseatuser.toUpperCase() + " IS IN THE HOTSEAT 🔥");
-                doAnimation("#aa1100");
+                popupText.text(`${hotseatEmoji} ${hotseatuser.toUpperCase()} IS IN THE HOTSEAT ${hotseatEmoji}`);
+                doAnimation(hotseatBg);
             }
         }
             
         if (hotseatison) {
             if (context.username === hotseatuser){
-                popupText.text("🔥 " + context['display-name'] + ": " + commandName + " 🔥");
-                doAnimation("#aa1100");
+                popupText.text(`${hotseatEmoji} ${context['display-name']}: ${commandName} ${hotseatEmoji}`);
+                doAnimation(hotseatBg);
             }
         }
     }
