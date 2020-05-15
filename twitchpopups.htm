@@ -8,16 +8,17 @@
           href="https://fonts.googleapis.com/css?family=Open Sans Condensed:700">
 
 	<style>
-		#popuptext {
-		    display: inline-block;
-			font-family: 'Open Sans Condensed';
-			font-weight: 700;
-			color: white;
-			font-size: 60px;
-			margin: 0;
-			margin-left: 15px;
-			white-space: nowrap;
-		}
+        #popuptext {
+            display: inline-block;
+            font-family: 'Open Sans Condensed';
+            font-weight: 700;
+            color: white;
+            font-size: 60px;
+            margin: 0;
+            margin-left: 15px;
+            white-space: normal;
+            word-wrap: hyphenate;
+        }
 
 		#popupbox {
 			position: absolute;
@@ -108,23 +109,51 @@
         
     // Animate text
     function doAnimation() {
+        resetScaling();
+        resizeFont(200);
+
         var textWidth = $("#popuptext").width();
-        $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
+        var textHeight = $("#popuptext").height();
+        boxWidth = Math.min(1875, textWidth + 30);
+           
+        $("#popuptext").css({ "opacity": 0, "margin-left": "50px" }); 
         $("#popupbox").width(1);
-        $("#popupbox").animate({width:textWidth+30}, 500);
+        $("#popupbox").height(1);
+        $("#popupbox").animate({width:boxWidth, height:textHeight}, 500);
         $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
     }
     
     function doHotseatAnimation() {
+        resetScaling();
+        resizeFont(200);
+
         var textWidth = $("#popuptext").width();
+        var textHeight = $("#popuptext").height();
+        boxWidth = Math.min(1875, textWidth + 30);
+
         $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
         $("#popupbox").css({"background-color":"#aa1100"}); 
         $("#popupbox").width(1);
-        $("#popupbox").animate({width:textWidth+30}, 500);
+        $("#popupbox").animate({ width: boxWidth, height: textHeight}, 500);
         $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
     }
-    
-    
+
+    //Resize Font to fit message into box no more than desiredHeight pixels in height.
+    function resizeFont(desiredHeight) {
+        var fontSize = 60;
+
+        while ($("#popuptext").height() > desiredHeight) {
+            fontSize -= 1;
+            $("#popuptext").css({ "font-size": fontSize });
+        }
+    }
+
+    //Reset scaling changes
+    function resetScaling() {
+        $("#popuptext").css({ "font-size": "60px" });
+        $("#popupbox").width(1875);
+        $("#popupbox").height(82);
+    }
         
     // Animate off
     function deleteAnimation() {
