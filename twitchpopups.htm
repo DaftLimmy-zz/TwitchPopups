@@ -114,7 +114,7 @@
             }
                 
             if (hotseatison) {
-                if (!commandName.includes('@') || commandName.includes(twitchChannel)) {
+                if (!commandName.includes('@') || commandName.includes('@' + twitchChannel)) {
                     if (context.username == hotseatuser) {
                         $("#popuptext").text(hotseatEmoji + " " + context['display-name'] + ": " + commandName + " " + hotseatEmoji);
                         doHotseatAnimation();
