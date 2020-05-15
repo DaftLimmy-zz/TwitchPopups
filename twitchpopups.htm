@@ -89,7 +89,7 @@
     //
     
     // Called every time a message comes in
-    const onMessageHandler = (target, context, msg, self) => {
+    function onMessageHandler(target, context, msg, self) {
         // Remove whitespace from chat message
         const commandName = msg.trim();
         
@@ -150,7 +150,7 @@
     }
     
 
-    const onConnectedHandler = (addr, port) => {
+    function onConnectedHandler (addr, port) {
         console.log(`* Connected to ${addr}:${port}`);
     }
 </script>
