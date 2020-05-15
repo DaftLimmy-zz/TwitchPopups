@@ -68,12 +68,12 @@
     
 
     // Hotseat stuff
-    var hotseatuser = "";
-    var hotseatison = false;
+    let hotSeatUser = "";
+    let hotSeatIsOn = false;
     //
     
     // Called every time a message comes in
-    function onMessageHandler(target, context, msg, self) {
+    const onMessageHandler = (target, context, msg, self) => {
         // Remove whitespace from chat message
         const commandName = msg.trim();
         
@@ -88,17 +88,17 @@
                 } else if (commandName.startsWith("!delete")) {
                   deleteAnimation();
                 } else if (commandName.startsWith("!hotseat ")) {
-                  hotseatison = true;
+                  hotSeatIsOn = true;
                   $("#popupbox").show();
-                  hotseatuser = commandName.substr(10).toLowerCase();
+                  hotSeatUser = commandName.substr(10).toLowerCase();
                   $("#popupbox").css({"background-color":"#aa1100"}); 
-                  $("#popuptext").text("🔥 " + hotseatuser.toUpperCase() + " IS IN THE HOTSEAT 🔥");
+                  $("#popuptext").text("🔥 " + hotSeatUser.toUpperCase() + " IS IN THE HOTSEAT 🔥");
                   doAnimation();
                 }
             }
                 
-            if (hotseatison) {
-                if (context.username == hotseatuser){
+            if (hotSeatIsOn) {
+                if (context.username == hotSeatUser){
                     $("#popuptext").text("🔥 " + context['display-name'] + ": " + commandName + " 🔥");
                     doHotseatAnimation();
                 }
@@ -107,16 +107,16 @@
     }
         
     // Animate text
-    function doAnimation() {
-        var textWidth = $("#popuptext").width();
+    const doAnimation = () => {
+        const textWidth = $("#popuptext").width();
         $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
         $("#popupbox").width(1);
         $("#popupbox").animate({width:textWidth+30}, 500);
         $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
     }
     
-    function doHotseatAnimation() {
-        var textWidth = $("#popuptext").width();
+    const doHotseatAnimation = () => {
+        const textWidth = $("#popuptext").width();
         $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
         $("#popupbox").css({"background-color":"#aa1100"}); 
         $("#popupbox").width(1);
@@ -127,15 +127,16 @@
     
         
     // Animate off
-    function deleteAnimation() {
+    const deleteAnimation = () => {
         hotseatison = false;
         $("#popupbox").animate({width:0}, 500);
         $("#popuptext").animate({"opacity":0, "margin-left":"50px"}, 700);
     }
     
 
-    function onConnectedHandler(addr, port) {
+    const onConnectedHandler = (addr, port) => {
         console.log(`* Connected to ${addr}:${port}`);
     }
+    
 </script>
 </html>
