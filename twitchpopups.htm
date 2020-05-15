@@ -8,22 +8,22 @@
           href="https://fonts.googleapis.com/css?family=Open Sans Condensed:700">
 
 	<style>
-        #popuptext {
-            display: inline-block;
-            font-family: 'Open Sans Condensed';
-            font-weight: 700;
-            color: white;
-            font-size: 60px;
-            margin: 0;
-            margin-left: 15px;
-            white-space: normal;
-            word-wrap: hyphenate;
-        }
+		#popuptext {
+			display: inline-block;
+			font-family: 'Open Sans Condensed';
+			font-weight: 700;
+			color: white;
+			font-size: 60px;
+			margin: 0;
+			margin-left: 15px;
+			white-space: normal;
+			word-wrap: hyphenate;
+		}
 
 		#popupbox {
 			position: absolute;
 			bottom: 20px;
-            left: 20px;
+            		left: 20px;
 			width: 0px;
 			height: 82px;
 			overflow: hidden;
@@ -134,7 +134,7 @@
         $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
         $("#popupbox").css({"background-color":"#aa1100"}); 
         $("#popupbox").width(1);
-        $("#popupbox").animate({ width: boxWidth, height: textHeight}, 500);
+        $("#popupbox").animate({width: boxWidth, height: textHeight}, 500);
         $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
     }
 
