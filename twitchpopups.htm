@@ -108,7 +108,7 @@
                 } else if (commandName.startsWith("!hotseat ")) {
                   hotseatison = true;
                   $("#popupbox").show();
-                  hotseatuser = commandName.substr(10).toLowerCase();
+                  hotseatuser = commandName.substr(9).toLowerCase();
                   $("#popupbox").css({"background-color":hotseatBg}); 
                   $("#popuptext").text(hotseatEmoji + " " + hotseatuser.toUpperCase() + " IS IN THE HOTSEAT " + hotseatEmoji);
                   doAnimation();
