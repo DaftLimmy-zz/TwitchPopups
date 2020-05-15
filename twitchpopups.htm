@@ -17,6 +17,7 @@
 			margin: 0;
 			margin-left: 15px;
 			white-space: nowrap;
+			position: relative; /* To allow marquee scrolling */
 		}
 
 		#popupbox {
@@ -36,7 +37,8 @@
 <body>
 
 	<div id="popupbox">
-	    <h1 id="popuptext"></h1>		
+	    <h1 id="popuptext">&nbsp;</h1>
+		<!--Added &nbsp; as a hack as first run after refresh popuptext.width was incorrect, this for whatever reason fixes it -->
 	</div>
 
 </body>
@@ -71,6 +73,12 @@
     var hotseatuser = "";
     var hotseatison = false;
     //
+	
+    // Marquee stuff
+    var textWidth = 0;
+    var leftMovement = 0;
+    var stopped = true;
+    var animateWidth = 0;
     
     // Called every time a message comes in
     function onMessageHandler(target, context, msg, self) {
@@ -100,7 +108,7 @@
             if (hotseatison) {
                 if (context.username == hotseatuser){
                     $("#popuptext").text("🔥 " + context['display-name'] + ": " + commandName + " 🔥");
-                    doHotseatAnimation();
+                    doAnimation();
                 }
             }
                 
@@ -108,20 +116,42 @@
         
     // Animate text
     function doAnimation() {
-        var textWidth = $("#popuptext").width();
+        $('#popuptext').stopMarquee(); //stop marquee if new alert
+	textWidth = $("#popuptext").width();
+	animateWidth = Math.min(textWidth+30, 1880); //get smallest width between screen width and text width
+	if(textWidth > animateWidth) { // if text width is > screen width marquee the text
+		stopped = false;
+		$('#popuptext').marquee();
+	}
+	else // if text width is < screen width keep text static
+	{
+		stopped = true;
+	}
         $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
         $("#popupbox").width(1);
-        $("#popupbox").animate({width:textWidth+30}, 500);
+        $("#popupbox").animate({width:animateWidth}, 500);
         $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
+	leftMovement = 0;
     }
     
     function doHotseatAnimation() {
-        var textWidth = $("#popuptext").width();
+	$('#popuptext').stopMarquee(); //stop marquee if new alert
+        textWidth = $("#popuptext").width();
+		animateWidth = Math.min(textWidth+30, 1880); //get smallest width between screen width and text width
+		if(textWidth > animateWidth) { // if text width is > screen width marquee the text
+			stopped = false;
+			$('#popuptext').marquee();
+		}
+		else // if text width is < screen width keep text static
+		{
+			stopped = true;
+		}
         $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
         $("#popupbox").css({"background-color":"#aa1100"}); 
         $("#popupbox").width(1);
-        $("#popupbox").animate({width:textWidth+30}, 500);
+        $("#popupbox").animate({width:animateWidth}, 500);
         $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
+		leftMovement = 0;
     }
     
     
@@ -137,5 +167,48 @@
     function onConnectedHandler(addr, port) {
         console.log(`* Connected to ${addr}:${port}`);
     }
+	
+    
+
+    // Marquee function
+    (function($) {
+    	$.fn.marquee = function() {
+		var started = false;
+		function go() {
+			if(!started) { //if first run or end of run, delay movement for 5 secs
+				setTimeout(function() {
+					leftMovement = 0;
+					started = true;
+					if(!stopped) go();
+					}, 5000);					
+			}
+			else { //if marquee is running
+				setTimeout(function() {
+					leftMovement = leftMovement + 1; //add 1 to left movement value
+					if(leftMovement > textWidth - animateWidth + 30) { //if end of text is visible wait 2 seconds and reset
+						setTimeout(function() {
+							leftMovement = 0;
+							started = false;								
+						}, 2000);
+						
+					}
+					else // if end of text is not visible, keep scrolling
+					{
+						$("#popuptext").css({"left": "-" + leftMovement + "px"});
+					}
+					if(!stopped) go();
+				}, 5); // scroll 1 px every 5 ms
+			}
+		}
+		if(!stopped) go();
+	}
+	$.fn.stopMarquee = function() {
+		function go() {
+			leftMovement = 0;
+			$("#popuptext").css({"left": "0px"});
+		}
+	}
+})(jQuery)
+
 </script>
 </html>
