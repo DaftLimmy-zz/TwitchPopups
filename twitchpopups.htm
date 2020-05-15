@@ -98,9 +98,11 @@
             }
                 
             if (hotseatison) {
-                if (context.username == hotseatuser){
-                    $("#popuptext").text("🔥 " + context['display-name'] + ": " + commandName + " 🔥");
-                    doHotseatAnimation();
+                if (!commandName.includes('@')) {
+                    if (context.username == hotseatuser){
+                        $("#popuptext").text("🔥 " + context['display-name'] + ": " + commandName + " 🔥");
+                        doHotseatAnimation();
+                    }
                 }
             }
                 
