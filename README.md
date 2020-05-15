@@ -10,7 +10,7 @@ Allows Twitch mods to display popup text on the stream via chat commands
 
 ## DOWNLOAD
 
-The latest TwitchPopups version can be found [as a zip archive here](https://github.com/DaftLimmy/TwitchPopups/archive/master.zip)
+The latest version of TwitchPopups can be found [as a zip archive here](https://github.com/DaftLimmy/TwitchPopups/archive/master.zip)
 
 ## INSTRUCTIONS
 
