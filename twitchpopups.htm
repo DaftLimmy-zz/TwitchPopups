@@ -6,16 +6,16 @@
     <script type="text/javascript">
 
         // Change Limmy to your Twitch channel
-        var twitchChannel = 'Limmy';
+        const twitchChannel = 'Limmy';
 
         // Your alert background. Default is a vibrant green
-        var alertBg = '#00AA00';
+        const alertBg = '#00AA00';
 
         // Hotseat background colour. Default is a fiery, fiery orange.
-        var hotseatBg = '#aa1100';
+        const hotseatBg = '#aa1100';
 
         // The emoji that surrounds the hotseat messages.
-        var hotseatEmoji = '🔥';
+        const hotseatEmoji = '🔥';
 
         // Follow the instructions in README.md
         
@@ -90,12 +90,12 @@
     
 
     // Hotseat stuff
-    var hotseatuser = "";
-    var hotseatison = false;
+    let hotSeatUser = "";
+    let hotSeatIsOn = false;
     var showing = false;
     var popupBox = document.getElementById('popupbox');
     var popupText = document.getElementById('popuptext');
-    
+
     // Called every time a message comes in
     function onMessageHandler(target, context, msg, self) {
         // Remove whitespace from chat message
@@ -111,16 +111,16 @@
                 } else if (commandName.startsWith("!delete")) {
                   deleteAnimation();
                 } else if (commandName.startsWith("!hotseat ")) {
-                  hotseatison = true;
-                  hotseatuser = commandName.replace(/!hotseat @?/, '').toLowerCase();
+                  hotSeatIsOn = true;
+                  hotSeatUser = commandName.replace(/!hotseat @?/, '').toLowerCase();
                   popupText.style.backgroundColor = hotseatBg;
-                  popupText.innerText = `${hotseatEmoji} ${hotseatuser} IS IN THE HOTSEAT ${hotseatEmoji}`;
+                  popupText.innerText = `${hotseatEmoji} ${hotSeatUser} IS IN THE HOTSEAT ${hotseatEmoji}`;
                   doAnimation();
                 }
             }
-                
-            if (hotseatison) {
-                if (context.username == hotseatuser){
+
+            if (hotSeatIsOn) {
+                if (context.username == hotSeatUser){
                     popupText.innerText = `${hotseatEmoji} ${context['display-name']}: ${commandName} ${hotseatEmoji}`;
                     doHotseatAnimation();
                 }
@@ -129,7 +129,7 @@
     }
         
     // Animate text
-    function doAnimation() {
+    const doAnimation = () => {
         if (showing) {
             // Re-hide without animation
             popupBox.style.transform = '';
@@ -143,19 +143,19 @@
         showing = true;
     }
     
-    function doHotseatAnimation() {
+    const doHotseatAnimation = () => {
         popupText.style.backgroundColor = hotseatBg;
         doAnimation();
     }
 
     // Animate off
-    function deleteAnimation() {
-        hotseatison = false;
+    const deleteAnimation = () => {
+        hotSeatIsOn = false;
         showing = false;
         popupBox.style.transform = '';
     }
 
-    function onConnectedHandler(addr, port) {
+    function onConnectedHandler (addr, port) {
         console.log(`* Connected to ${addr}:${port}`);
     }
 </script>
