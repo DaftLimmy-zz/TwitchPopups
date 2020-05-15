@@ -51,7 +51,7 @@
     };
 
     // Create a client with our options
-    let client = new tmi.client(opts);
+    const client = new tmi.client(opts);
 
     // Register our event handlers (defined below)
     client.on('message', onMessageHandler);
@@ -66,10 +66,12 @@
     // ANIMATION
     // =========    
     
+    const popupbox = $("#popupbox");
+    const popupText = $("#popuptext");
 
     // Hotseat stuff
-    var hotseatuser = "";
-    var hotseatison = false;
+    let hotseatuser = "";
+    let hotseatison = false;
     //
     
     // Called every time a message comes in
@@ -79,58 +81,54 @@
         
         // If the command is known, let's execute it
 
-            if (context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))) {
-                if (commandName.startsWith("!alert ")) {
-                    $("#popupbox").show();
-                    $("#popupbox").css({"background-color":"#00AA00"}); 
-                    $("#popuptext").text(commandName.substr(7).toUpperCase());
-                    doAnimation();
-                } else if (commandName.startsWith("!delete")) {
-                  deleteAnimation();
-                } else if (commandName.startsWith("!hotseat ")) {
-                  hotseatison = true;
-                  $("#popupbox").show();
-                  hotseatuser = commandName.substr(10).toLowerCase();
-                  $("#popupbox").css({"background-color":"#aa1100"}); 
-                  $("#popuptext").text("🔥 " + hotseatuser.toUpperCase() + " IS IN THE HOTSEAT 🔥");
-                  doAnimation();
-                }
+        if (context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))) {
+            if (commandName.startsWith("!alert ")) {
+                popupbox.show().css({"background-color":"#00AA00"}); 
+                popupText.text(commandName.substr(7).toUpperCase());
+                doAnimation();
+            } else if (commandName.startsWith("!delete")) {
+                deleteAnimation();
+            } else if (commandName.startsWith("!hotseat ")) {
+                hotseatison = true;
+                popupbox.show().css({"background-color":"#aa1100"}); 
+                hotseatuser = commandName.substr(10).toLowerCase();
+                popupText.text("🔥 " + hotseatuser.toUpperCase() + " IS IN THE HOTSEAT 🔥");
+                doAnimation();
             }
-                
-            if (hotseatison) {
-                if (context.username == hotseatuser){
-                    $("#popuptext").text("🔥 " + context['display-name'] + ": " + commandName + " 🔥");
-                    doHotseatAnimation();
-                }
+        }
+            
+        if (hotseatison) {
+            if (context.username === hotseatuser){
+                popupText.text("🔥 " + context['display-name'] + ": " + commandName + " 🔥");
+                doHotseatAnimation();
             }
-                
+        }
     }
         
     // Animate text
     function doAnimation() {
-        var textWidth = $("#popuptext").width();
-        $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
-        $("#popupbox").width(1);
-        $("#popupbox").animate({width:textWidth+30}, 500);
-        $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
+        const textWidth = popupText.width();
+        popupbox.width(1).animate({width:textWidth+30}, 500);
+        popupText.css({"opacity":0, "margin-left":"50px"})
+            .animate({"opacity":1, "margin-left":"15px"}, 700);
     }
     
     function doHotseatAnimation() {
-        var textWidth = $("#popuptext").width();
-        $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
-        $("#popupbox").css({"background-color":"#aa1100"}); 
-        $("#popupbox").width(1);
-        $("#popupbox").animate({width:textWidth+30}, 500);
-        $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
+        const textWidth = popupText.width();
+
+        popupText.css({"opacity":0, "margin-left":"50px"})
+            .animate({"opacity":1, "margin-left":"15px"}, 700);
+
+        popupbox.css({"background-color":"#aa1100"})
+            .width(1)
+            .animate({width:textWidth+30}, 500);
     }
-    
-    
         
     // Animate off
     function deleteAnimation() {
         hotseatison = false;
-        $("#popupbox").animate({width:0}, 500);
-        $("#popuptext").animate({"opacity":0, "margin-left":"50px"}, 700);
+        popupbox.animate({width:0}, 500);
+        popupText.animate({"opacity":0, "margin-left":"50px"}, 700);
     }
     
 
