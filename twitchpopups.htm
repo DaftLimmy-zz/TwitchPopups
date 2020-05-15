@@ -1,6 +1,35 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+
+    <script type="text/javascript">
+
+        // Change Limmy to your Twitch channel
+        var twitchChannel = 'Limmy';
+
+        // Your alert background. Default is a vibrant green
+        var alertBg = '#00AA00';
+
+        // Hotseat background colour. Default is a firey, firey orange.
+        var hotseatBg = '#aa1100';
+
+        // The emoji that surrounds the hotseat messages.
+        var hotseatEmoji = '🔥';
+        // To open an emoji keyboard on your computer:
+        //     Windows: Windows Key + Period (.)
+        //     Mac: Ctrl + Cmd + Space
+
+
+
+        // Stop there. You're done! Hit save and continue following the instructions in README.md
+    </script>
+
+
+
+
+
+
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="jquery-3.4.1.min.js"></script>
     <script src="tmi.min.js"></script>
@@ -26,7 +55,6 @@
 			width: 0px;
 			height: 82px;
 			overflow: hidden;
-			background-color: #00AA00;
 		}
 		
 	</style>
@@ -42,15 +70,13 @@
 </body>
     
 <script type="text/javascript">
-
-    // Define configuration options
     const opts = {
         channels: [
-          "Limmy"
+            twitchChannel
         ]
     };
 
-    // Create a client with our options
+    // Create a client with our options defined at the top of the file
     let client = new tmi.client(opts);
 
     // Register our event handlers (defined below)
@@ -82,7 +108,7 @@
             if (context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))) {
                 if (commandName.startsWith("!alert ")) {
                     $("#popupbox").show();
-                    $("#popupbox").css({"background-color":"#00AA00"}); 
+                    $("#popupbox").css({"background-color":alertBg}); 
                     $("#popuptext").text(commandName.substr(7).toUpperCase());
                     doAnimation();
                 } else if (commandName.startsWith("!delete")) {
@@ -91,15 +117,15 @@
                   hotseatison = true;
                   $("#popupbox").show();
                   hotseatuser = commandName.substr(10).toLowerCase();
-                  $("#popupbox").css({"background-color":"#aa1100"}); 
-                  $("#popuptext").text("🔥 " + hotseatuser.toUpperCase() + " IS IN THE HOTSEAT 🔥");
+                  $("#popupbox").css({"background-color":hotseatBg}); 
+                  $("#popuptext").text(hotseatEmoji + " " + hotseatuser.toUpperCase() + " IS IN THE HOTSEAT " + hotseatEmoji);
                   doAnimation();
                 }
             }
                 
             if (hotseatison) {
                 if (context.username == hotseatuser){
-                    $("#popuptext").text("🔥 " + context['display-name'] + ": " + commandName + " 🔥");
+                    $("#popuptext").text(hotseatEmoji + " " + context['display-name'] + ": " + commandName + " " + hotseatEmoji);
                     doHotseatAnimation();
                 }
             }
@@ -118,7 +144,7 @@
     function doHotseatAnimation() {
         var textWidth = $("#popuptext").width();
         $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
-        $("#popupbox").css({"background-color":"#aa1100"}); 
+        $("#popupbox").css({"background-color":hotseatBg}); 
         $("#popupbox").width(1);
         $("#popupbox").animate({width:textWidth+30}, 500);
         $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
