@@ -1,13 +1,28 @@
 # TwitchPopups
+
 Allows Twitch mods to display popup text on the stream via chat commands
 
-COMMAND LIST:
+## COMMAND LIST
+
 - !alert: will display whatever text comes after the !alert command
 - !hotseat [@username]: will display the chat of the specified user from that point on
 - !delete: will delete the popup
 
-INSTRUCTIONS
-1. Download the [latest TwitchPopups archive](https://github.com/DaftLimmy/TwitchPopups/archive/master.zip) and extract to your PC
+## DOWNLOAD
+
+The latest TwitchPopups version can be found [as a zip archive here](https://github.com/DaftLimmy/TwitchPopups/archive/master.zip)
+
+## INSTRUCTIONS
+
+1. Extract the zip archive
 2. Edit twitchpopups.htm and change "Limmy" to your Twitch channel name
 3. Use OBS/Streamlabs OBS to add twitchpopups.htm as a browser source (Fit to Screen, 1920x1080)
 4. Tick "Shutdown source when not visible" in browser source properties. That way, any tweaks you make are reloaded when you toggle the visibility button
+
+## UPGRADE
+
+1. Open your existing twitchpopups.htm and copy your configuration settings
+2. Download the latest version
+3. Open the zip archive and open the TwitchPopups-master directory
+4. Select all of the files and drag them over your existing TwitchPopups directory. Say yes to any prompts to overwrite files.
+5. Edit the configuration section at the top of twitchpopups.htm, pasting in your settings from step 1.
