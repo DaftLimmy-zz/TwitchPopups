@@ -10,11 +10,18 @@
         // Your alert background. Default is a vibrant green
         var alertBg = '#00AA00';
 
-        // Hotseat background colour. Default is a firey orange
+        // Hotseat background colour. Default is a firey, firey orange.
         var hotseatBg = '#aa1100';
 
+        // The emoji that surrounds the hotseat messages.
+        var hotseatEmoji = '🔥';
+        // To open an emoji keyboard on your computer:
+        //     Windows: Windows Key + Period (.)
+        //     Mac: Ctrl + Cmd + Space
 
-        // Stop there! You're configured. Hit save [and follow instructions xyz] :)
+
+
+        // Stop there. You're done! Hit save and continue following the instructions in README.md
     </script>
 
 
@@ -111,14 +118,14 @@
                   $("#popupbox").show();
                   hotseatuser = commandName.substr(10).toLowerCase();
                   $("#popupbox").css({"background-color":hotseatBg}); 
-                  $("#popuptext").text("🔥 " + hotseatuser.toUpperCase() + " IS IN THE HOTSEAT 🔥");
+                  $("#popuptext").text(hotseatEmoji + " " + hotseatuser.toUpperCase() + " IS IN THE HOTSEAT " + hotseatEmoji);
                   doAnimation();
                 }
             }
                 
             if (hotseatison) {
                 if (context.username == hotseatuser){
-                    $("#popuptext").text("🔥 " + context['display-name'] + ": " + commandName + " 🔥");
+                    $("#popuptext").text(hotseatEmoji + " " + context['display-name'] + ": " + commandName + " " + hotseatEmoji);
                     doHotseatAnimation();
                 }
             }
