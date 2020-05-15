@@ -2,6 +2,25 @@
 <html>
 <head>
     <meta charset="utf-8">
+
+    <script type="text/javascript">
+
+        // Change Limmy to your Twitch channel
+        var twitchChannel = 'Limmy';
+
+        // Your alert background. Default is a vibrant green
+        var alertBg = '#00AA00';
+
+        // Hotseat background colour. Default is a fiery, fiery orange.
+        var hotseatBg = '#aa1100';
+
+        // The emoji that surrounds the hotseat messages.
+        var hotseatEmoji = '🔥';
+
+        // Follow the instructions in README.md
+        
+    </script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="tmi.min.js"></script>
     <link rel="stylesheet"
@@ -47,15 +66,13 @@
 </body>
     
 <script type="text/javascript">
-
-    // Define configuration options
     const opts = {
         channels: [
-          "Limmy"
+            twitchChannel
         ]
     };
 
-    // Create a client with our options
+    // Create a client with our options defined at the top of the file
     let client = new tmi.client(opts);
 
     // Register our event handlers (defined below)
@@ -88,7 +105,7 @@
 
             if (context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))) {
                 if (commandName.startsWith("!alert ")) {
-                    popupText.style.backgroundColor = '#00AA00';
+                    popupText.style.backgroundColor = alertBg;
                     popupText.innerText = commandName.substr(7);
                     doAnimation();
                 } else if (commandName.startsWith("!delete")) {
@@ -96,15 +113,15 @@
                 } else if (commandName.startsWith("!hotseat ")) {
                   hotseatison = true;
                   hotseatuser = commandName.replace(/!hotseat @?/, '').toLowerCase();
-                  popupText.style.backgroundColor = "#aa1100";
-                  popupText.innerText = `🔥 ${hotseatuser} IS IN THE HOTSEAT 🔥`;
+                  popupText.style.backgroundColor = hotseatBg;
+                  popupText.innerText = `${hotseatEmoji} ${hotseatuser} IS IN THE HOTSEAT ${hotseatEmoji}`;
                   doAnimation();
                 }
             }
                 
             if (hotseatison) {
                 if (context.username == hotseatuser){
-                    popupText.innerText = `🔥 ${context['display-name']}: ${commandName} 🔥`;
+                    popupText.innerText = `${hotseatEmoji} ${context['display-name']}: ${commandName} ${hotseatEmoji}`;
                     doHotseatAnimation();
                 }
             }
@@ -127,7 +144,7 @@
     }
     
     function doHotseatAnimation() {
-        popupText.style.backgroundColor = '#aa1100';
+        popupText.style.backgroundColor = hotseatBg;
         doAnimation();
     }
 
