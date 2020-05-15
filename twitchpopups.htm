@@ -1,13 +1,19 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="jquery-3.4.1.min.js"></script>
     <script src="tmi.min.js"></script>
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Open Sans Condensed:700">
 
 	<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+			overflow: hidden;
+		}
+
 		#popuptext {
 		    display: inline-block;
 			font-family: 'Open Sans Condensed';
@@ -15,20 +21,19 @@
 			color: white;
 			font-size: 60px;
 			margin: 0;
-			margin-left: 15px;
-			white-space: nowrap;
+			padding: 0 15px;
+			background-color: #00AA00;
+			text-transform: uppercase;
 		}
 
 		#popupbox {
 			position: absolute;
 			bottom: 20px;
             left: 20px;
-			width: 0px;
-			height: 82px;
-			overflow: hidden;
-			background-color: #00AA00;
+			right: 20px;
+			transform: translateY(calc(100% + 40px));
+			transition: transform .4s ease-out;
 		}
-		
 	</style>
 
 </head>
@@ -70,7 +75,9 @@
     // Hotseat stuff
     var hotseatuser = "";
     var hotseatison = false;
-    //
+    var showing = false;
+    var popupBox = document.getElementById('popupbox');
+    var popupText = document.getElementById('popuptext');
     
     // Called every time a message comes in
     function onMessageHandler(target, context, msg, self) {
@@ -81,25 +88,23 @@
 
             if (context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))) {
                 if (commandName.startsWith("!alert ")) {
-                    $("#popupbox").show();
-                    $("#popupbox").css({"background-color":"#00AA00"}); 
-                    $("#popuptext").text(commandName.substr(7).toUpperCase());
+                    popupText.style.backgroundColor = '#00AA00';
+                    popupText.innerText = commandName.substr(7);
                     doAnimation();
                 } else if (commandName.startsWith("!delete")) {
                   deleteAnimation();
                 } else if (commandName.startsWith("!hotseat ")) {
                   hotseatison = true;
-                  $("#popupbox").show();
-                  hotseatuser = commandName.substr(10).toLowerCase();
-                  $("#popupbox").css({"background-color":"#aa1100"}); 
-                  $("#popuptext").text("🔥 " + hotseatuser.toUpperCase() + " IS IN THE HOTSEAT 🔥");
+                  hotseatuser = commandName.replace(/!hotseat @?/, '').toLowerCase();
+                  popupText.style.backgroundColor = "#aa1100";
+                  popupText.innerText = `🔥 ${hotseatuser} IS IN THE HOTSEAT 🔥`;
                   doAnimation();
                 }
             }
                 
             if (hotseatison) {
                 if (context.username == hotseatuser){
-                    $("#popuptext").text("🔥 " + context['display-name'] + ": " + commandName + " 🔥");
+                    popupText.innerText = `🔥 ${context['display-name']}: ${commandName} 🔥`;
                     doHotseatAnimation();
                 }
             }
@@ -108,31 +113,30 @@
         
     // Animate text
     function doAnimation() {
-        var textWidth = $("#popuptext").width();
-        $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
-        $("#popupbox").width(1);
-        $("#popupbox").animate({width:textWidth+30}, 500);
-        $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
+        if (showing) {
+            // Re-hide without animation
+            popupBox.style.transform = '';
+            popupBox.style.transition = 'none';
+            // Trigger reflow to apply updated style
+            void popupBox.offsetWidth;
+            // Prepare to show again with animation
+            popupBox.style.transition = '';
+        }
+        popupBox.style.transform = 'none';
+        showing = true;
     }
     
     function doHotseatAnimation() {
-        var textWidth = $("#popuptext").width();
-        $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
-        $("#popupbox").css({"background-color":"#aa1100"}); 
-        $("#popupbox").width(1);
-        $("#popupbox").animate({width:textWidth+30}, 500);
-        $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
+        popupText.style.backgroundColor = '#aa1100';
+        doAnimation();
     }
-    
-    
-        
+
     // Animate off
     function deleteAnimation() {
         hotseatison = false;
-        $("#popupbox").animate({width:0}, 500);
-        $("#popuptext").animate({"opacity":0, "margin-left":"50px"}, 700);
+        showing = false;
+        popupBox.style.transform = '';
     }
-    
 
     function onConnectedHandler(addr, port) {
         console.log(`* Connected to ${addr}:${port}`);
