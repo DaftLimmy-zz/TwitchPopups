@@ -10,4 +10,4 @@ INSTRUCTIONS
 1. Download the [latest TwitchPopups archive](https://github.com/DaftLimmy/TwitchPopups/archive/master.zip) and extract to your PC
 2. Edit twitchpopups.htm and change "Limmy" to your Twitch channel name
 3. Use OBS/Streamlabs OBS to add twitchpopups.htm as a browser source (Fit to Screen, 1920x1080)
-
+4. Tick "Shutdown source when not visible" in browser source properties. That way, any tweaks you make are reloaded when you toggle the visibility button
