@@ -1,25 +1,6 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-
-    <script type="text/javascript">
-
-        // Change Limmy to your Twitch channel
-        const twitchChannel = 'Limmy';
-
-        // Your alert background. Default is a vibrant green
-        const alertBg = '#00AA00';
-
-        // Hotseat background colour. Default is a fiery, fiery orange.
-        const hotseatBg = '#aa1100';
-
-        // The emoji that surrounds the hotseat messages.
-        const hotseatEmoji = '🔥';
-
-        // Follow the instructions in README.md
-        
-    </script>
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="jquery-3.4.1.min.js"></script>
     <script src="tmi.min.js"></script>
@@ -33,6 +14,7 @@
 			font-weight: 700;
 			color: white;
 			font-size: 60px;
+			word-wrap:break-word;
 			margin: 0;
 			margin-left: 15px;
 			white-space: nowrap;
@@ -46,25 +28,46 @@
 			height: 82px;
 			overflow: hidden;
 		}
-		
 	</style>
-
 </head>
 
 <body>
-
 	<div id="popupbox">
-	    <h1 id="popuptext"></h1>		
+		<!-- HTML elements can close themselves if there is no need to add default inner text.
+			Easiest example is <br/> which simultaneously opens and closes itself. -->
+	    <h1 id="popuptext"/>		
 	</div>
-
 </body>
     
 <script type="text/javascript">
-    const opts = {
+	// Change Limmy to your Twitch channel
+    const twitchChannel = 'Limmy';
+
+    // Your alert background. Default is a vibrant green
+    const alertBg = '#00AA00';
+
+    // Hotseat background colour. Default is a fiery, fiery orange.
+    const hotseatBg = '#aa1100';
+
+    // The emoji that surrounds the hotseat messages.
+    const hotseatEmoji = '🔥';
+    
+	//Changeable message for when someones been a bad boy 
+	const badboyPlaceholder = "I've said something problematic! ";
+	
+	const opts = {
         channels: [
             twitchChannel
         ]
     };
+	
+	let problematic = new Array;
+    $.get('badwords.txt', function(data){
+		problematic = data.split('\n');
+		//Custom message to not show all the words imported for TOS reasons
+		//Included non-problematic test phrase - testSwearFilter
+		console.log("Succesfully imported bad words");
+	});
 
     // Create a client with our options defined at the top of the file
     let client = new tmi.client(opts);
@@ -76,17 +79,13 @@
     // Connect to Twitch:
     client.connect();
 
-    //
-    //
     // =========
     // ANIMATION
     // =========    
     
-
     // Hotseat stuff
     let hotSeatUser = "";
     let hotSeatIsOn = false;
-    //
     
     // Called every time a message comes in
     function onMessageHandler(target, context, msg, self) {
@@ -94,32 +93,59 @@
         const commandName = msg.trim();
         
         // If the command is known, let's execute it
-
-            if (context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))) {
-                if (commandName.startsWith("!alert ")) {
-                    $("#popupbox").show();
-                    $("#popupbox").css({"background-color":alertBg}); 
-                    $("#popuptext").text(commandName.substr(7).toUpperCase());
-                    doAnimation();
-                } else if (commandName.startsWith("!delete")) {
-                  deleteAnimation();
-                } else if (commandName.startsWith("!hotseat ")) {
-                  hotSeatIsOn = true;
-                  $("#popupbox").show();
-                  hotSeatUser = commandName.substr(10).toLowerCase();
-                  $("#popupbox").css({"background-color":hotseatBg}); 
-                  $("#popuptext").text(`${hotseatEmoji}  ${hotSeatUser.toUpperCase()} IS IN THE HOTSEAT ${hotseatEmoji}`);
-                  doAnimation();
-                }
-            }
-                
-            if (hotSeatIsOn) {
-                if (context.username == hotSeatUser){
-                    $("#popuptext").text(`${hotseatEmoji} ${context['display-name']}: ${commandName} ${hotseatEmoji}`);
-                    doHotseatAnimation();
-                }
-            }
-                
+		if (context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))) {
+			if (commandName.startsWith("!alert ")) 
+			{
+				$("#popupbox").show();
+				$("#popupbox").css({"background-color":alertBg}); 
+				$("#popuptext").text(commandName.substr(7).toUpperCase());
+				doAnimation();
+			} 
+			else if (commandName.startsWith("!delete")) 
+			{
+				deleteAnimation();
+			} 
+			else if (commandName.startsWith("!hotseat ")) 
+			{
+				hotSeatIsOn = true;
+				hotSeatUser = commandName.substr(10).toLowerCase();
+				  
+				$("#popupbox").show();
+				$("#popupbox").css({"background-color":hotseatBg}); 
+				$("#popuptext").text(`${hotseatEmoji}  ${hotSeatUser.toUpperCase()} IS IN THE HOTSEAT ${hotseatEmoji}`);
+				doAnimation();
+			}
+		}
+			
+		if (hotSeatIsOn) {
+			if (context.username == hotSeatUser){
+				//if 0, they havent swore, if 1, they have
+				let swore = 0;
+				
+				//Loop through list of problematic words
+				for (let i = 0; i < problematic.length; i++){
+					//spaces at either side of problematic word to make sure
+					//normal words containing a bad letters don't get caught
+					//Lower case to make it easier to catch all swears
+					if(commandName.toLowerCase().startsWith(problematic[i]) 
+					|| commandName.toLowerCase().endsWith(problematic[i]) 
+					|| commandName.toLowerCase().includes(" " + problematic[i] + " ")){
+						swore = 1;
+					}
+				}
+				
+				//If you've said something bad the swear placeholder will be 
+				//your message, if not your message will be used.
+				if(swore == 1){
+					$("#popuptext").text(`${hotseatEmoji} ${context['display-name']}: ${badboyPlaceholder} ${hotseatEmoji}`);
+				}
+				else{
+					$("#popuptext").text(`${hotseatEmoji} ${context['display-name']}: ${commandName} ${hotseatEmoji}`);
+				}
+				
+				doHotseatAnimation();
+			}
+		}             
     }
         
     // Animate text
@@ -139,9 +165,7 @@
         $("#popupbox").animate({width:textWidth+30}, 500);
         $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
     }
-    
-    
-        
+            
     // Animate off
     const deleteAnimation = () => {
         hotSeatIsOn = false;
@@ -149,7 +173,6 @@
         $("#popuptext").animate({"opacity":0, "margin-left":"50px"}, 700);
     }
     
-
     function onConnectedHandler (addr, port) {
         console.log(`* Connected to ${addr}:${port}`);
     }
