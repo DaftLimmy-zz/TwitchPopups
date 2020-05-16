@@ -1,5 +1,5 @@
 /*
-Modified version of bad-words https://github.com/web-mech/badwords
+Heavily modified version of bad-words https://github.com/web-mech/badwords
 
 // Base word list is compiled from a custom combination of:
 // https://github.com/web-mech/badwords-list
