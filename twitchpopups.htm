@@ -1,6 +1,29 @@
-<!DOCTYPE HTML>
+﻿<!DOCTYPE HTML>
 <html>
 <head>
+
+    <script type="text/javascript">
+
+        // Change Limmy to your Twitch channel
+        const twitchChannel = 'Limmy';
+
+        // Your alert background. Default is a vibrant green
+        const alertBg = '#00AA00';
+
+        // Hotseat background colour. Default is a fiery, fiery orange.
+        const hotseatBg = '#aa1100';
+
+        // The emoji that surrounds the hotseat messages.
+        const hotseatEmoji = '🔥';
+
+        // Maximum sizes for message boxes
+        const maxBoxWidth = 1880; // Default 1880, accounting for 20 pixel wide margins on a 1920 wide display.
+        const maxBoxHeight = 200;
+
+        // Follow the instructions in README.md
+        
+    </script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="jquery-3.4.1.min.js"></script>
     <script src="tmi.min.js"></script>
@@ -8,26 +31,23 @@
           href="https://fonts.googleapis.com/css?family=Open Sans Condensed:700">
 
 	<style>
-		#popuptext {
-			display: inline-block;
-			font-family: 'Open Sans Condensed';
-			font-weight: 700;
-			color: white;
-			font-size: 60px;
-			margin: 0;
-			margin-left: 15px;
-			white-space: normal;
-			word-wrap: hyphenate;
-		}
+        #popuptext {
+            display: inline-block;
+            font-family: 'Open Sans Condensed';
+            font-weight: 700;
+            color: white;
+            font-size: 60px;
+            margin: 0;
+            margin-left: 15px;
+        }
 
 		#popupbox {
 			position: absolute;
 			bottom: 20px;
-            		left: 20px;
+            left: 20px;
 			width: 0px;
 			height: 82px;
 			overflow: hidden;
-			background-color: #00AA00;
 		}
 		
 	</style>
@@ -43,15 +63,13 @@
 </body>
     
 <script type="text/javascript">
-
-    // Define configuration options
     const opts = {
         channels: [
-          "Limmy"
+            twitchChannel
         ]
     };
 
-    // Create a client with our options
+    // Create a client with our options defined at the top of the file
     let client = new tmi.client(opts);
 
     // Register our event handlers (defined below)
@@ -69,8 +87,8 @@
     
 
     // Hotseat stuff
-    var hotseatuser = "";
-    var hotseatison = false;
+    let hotSeatUser = "";
+    let hotSeatIsOn = false;
     //
     
     // Called every time a message comes in
@@ -83,24 +101,24 @@
             if (context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))) {
                 if (commandName.startsWith("!alert ")) {
                     $("#popupbox").show();
-                    $("#popupbox").css({"background-color":"#00AA00"}); 
+                    $("#popupbox").css({"background-color":alertBg}); 
                     $("#popuptext").text(commandName.substr(7).toUpperCase());
                     doAnimation();
                 } else if (commandName.startsWith("!delete")) {
                   deleteAnimation();
                 } else if (commandName.startsWith("!hotseat ")) {
-                  hotseatison = true;
+                  hotSeatIsOn = true;
                   $("#popupbox").show();
-                  hotseatuser = commandName.substr(10).toLowerCase();
-                  $("#popupbox").css({"background-color":"#aa1100"}); 
-                  $("#popuptext").text("🔥 " + hotseatuser.toUpperCase() + " IS IN THE HOTSEAT 🔥");
+                  hotSeatUser = commandName.substr(10).toLowerCase();
+                  $("#popupbox").css({"background-color":hotseatBg}); 
+                  $("#popuptext").text(`${hotseatEmoji}  ${hotSeatUser.toUpperCase()} IS IN THE HOTSEAT ${hotseatEmoji}`);
                   doAnimation();
                 }
             }
                 
-            if (hotseatison) {
-                if (context.username == hotseatuser){
-                    $("#popuptext").text("🔥 " + context['display-name'] + ": " + commandName + " 🔥");
+            if (hotSeatIsOn) {
+                if (context.username == hotSeatUser){
+                    $("#popuptext").text(`${hotseatEmoji} ${context['display-name']}: ${commandName} ${hotseatEmoji}`);
                     doHotseatAnimation();
                 }
             }
@@ -108,62 +126,55 @@
     }
         
     // Animate text
-    function doAnimation() {
-        resetScaling();
-        resizeFont(200);
-
+    const doAnimation = () => {
+        resizeFont();
         var textWidth = $("#popuptext").width();
         var textHeight = $("#popuptext").height();
-        boxWidth = Math.min(1875, textWidth + 30);
+        boxWidth = Math.min(maxBoxWidth, textWidth + 30);
            
-        $("#popuptext").css({ "opacity": 0, "margin-left": "50px" }); 
+        $("#popuptext").css({ "opacity": 0, "margin-left": "35px", "margin-right": "15px" }); 
         $("#popupbox").width(1);
-        $("#popupbox").height(1);
-        $("#popupbox").animate({width:boxWidth, height:textHeight}, 500);
+        $("#popupbox").height(textHeight);
+        $("#popupbox").animate({width:boxWidth}, 500);
         $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
     }
     
-    function doHotseatAnimation() {
-        resetScaling();
-        resizeFont(200);
-
+    const doHotseatAnimation = () => {
+        resizeFont();
         var textWidth = $("#popuptext").width();
         var textHeight = $("#popuptext").height();
-        boxWidth = Math.min(1875, textWidth + 30);
+        boxWidth = Math.min(maxBoxWidth, textWidth + 30);
 
-        $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
-        $("#popupbox").css({"background-color":"#aa1100"}); 
+        $("#popuptext").css({ "opacity": 0, "margin-left": "35px", "margin-right": "-45px" }); 
+        $("#popupbox").css({"background-color":hotseatBg}); 
         $("#popupbox").width(1);
-        $("#popupbox").animate({width:boxWidth, height:textHeight}, 500);
-        $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
+        $("#popupbox").height(textHeight);
+        $("#popupbox").animate({width:boxWidth}, 500);
+        $("#popuptext").animate({"opacity":1, "margin-left":"15px", "margin-right":"15px"}, 700);
     }
 
-    //Resize Font to fit message into box no more than desiredHeight pixels in height.
-    function resizeFont(desiredHeight) {
-        var fontSize = 60;
+    //Resize Font to fit message into box no greater than desiredHeight pixels in height.
+    const resizeFont = () => {
+        $("#popuptext").css({ "font-size": "60px" });
+        $("#popupbox").width(maxBoxWidth);
+        $("#popupbox").height(82);
 
-        while ($("#popuptext").height() > desiredHeight) {
+        let fontSize = 60;
+        while ($("#popuptext").height() > maxBoxHeight) {
             fontSize -= 1;
             $("#popuptext").css({ "font-size": fontSize });
         }
     }
 
-    //Reset scaling changes
-    function resetScaling() {
-        $("#popuptext").css({ "font-size": "60px" });
-        $("#popupbox").width(1875);
-        $("#popupbox").height(82);
-    }
-        
     // Animate off
-    function deleteAnimation() {
-        hotseatison = false;
+    const deleteAnimation = () => {
+        hotSeatIsOn = false;
         $("#popupbox").animate({width:0}, 500);
         $("#popuptext").animate({"opacity":0, "margin-left":"50px"}, 700);
     }
     
 
-    function onConnectedHandler(addr, port) {
+    function onConnectedHandler (addr, port) {
         console.log(`* Connected to ${addr}:${port}`);
     }
 </script>
