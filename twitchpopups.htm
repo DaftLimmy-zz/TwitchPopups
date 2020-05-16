@@ -114,11 +114,9 @@
             }
                 
             if (hotSeatIsOn) {
-                if (!commandName.includes('@') || commandName.includes('@' + twitchChannel)) {
-                    if (context.username == hotSeatUser) {
-                        $("#popuptext").text(`${hotseatEmoji} ${context['display-name']}: ${commandName} ${hotseatEmoji}`);
-                        doHotseatAnimation();
-                    }
+                if (context.username == hotSeatUser && (!commandName.startsWith('@') || commandName.startsWith('@' + twitchChannel))) {
+                    $("#popuptext").text(`${hotseatEmoji} ${context['display-name']}: ${commandName} ${hotseatEmoji}`);
+                    doHotseatAnimation();
                 }
             }
                 
