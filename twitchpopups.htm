@@ -163,14 +163,14 @@
 
 			//replace any twitch emotes in the message with img tags for those emotes
       if(twitchEmotes){
-        for (var emoteIndex in emotes) {
+        for (let emoteIndex in emotes) {
           const emote = emotes[emoteIndex];
-          for (var charIndexes in emote) {
+          for (let charIndexes in emote) {
             let emoteIndexes = emote[charIndexes];
             if (typeof emoteIndexes == "string") {
               emoteIndexes = emoteIndexes.split("-");
               emoteIndexes = [parseInt(emoteIndexes[0]), parseInt(emoteIndexes[1])];
-              for (var i = emoteIndexes[0]; i <= emoteIndexes[1]; ++i) {
+              for (let i = emoteIndexes[0]; i <= emoteIndexes[1]; ++i) {
                 newMessage[i] = "";
               }
               newMessage[emoteIndexes[0]] = `<img class="emoticon" src="https://static-cdn.jtvnw.net/emoticons/v1/${emoteIndex}/3.0"/>`;
