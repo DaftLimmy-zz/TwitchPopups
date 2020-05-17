@@ -1,30 +1,11 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-
-    <script type="text/javascript">
-
-        // Change Limmy to your Twitch channel
-        const twitchChannel = 'Limmy';
-
-        // Your alert background. Default is a vibrant green
-        const alertBg = '#00AA00';
-
-        // Hotseat background colour. Default is a fiery, fiery orange.
-        const hotseatBg = '#aa1100';
-
-        // The emoji that surrounds the hotseat messages.
-        const hotseatEmoji = '🔥';
-
-        // Follow the instructions in README.md
-        
-    </script>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="jquery-3.4.1.min.js"></script>
-    <script src="tmi.min.js"></script>
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Open Sans Condensed:700">
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script src='jquery-3.4.1.min.js'></script>
+    <script src='tmi.min.js'></script>
+    <link rel='stylesheet'
+          href='https://fonts.googleapis.com/css?family=Open Sans Condensed:700'>
 
 	<style>
 		#popuptext {
@@ -53,105 +34,96 @@
 
 <body>
 
-	<div id="popupbox">
-	    <h1 id="popuptext"></h1>		
+	<div id='popupbox'>
+	    <h1 id='popuptext'></h1>		
 	</div>
 
 </body>
     
-<script type="text/javascript">
-    const opts = {
-        channels: [
-            twitchChannel
-        ]
-    };
-
-    // Create a client with our options defined at the top of the file
-    let client = new tmi.client(opts);
-
-    // Register our event handlers (defined below)
-    client.on('message', onMessageHandler);
-    client.on('connected', onConnectedHandler);
-
-    // Connect to Twitch:
-    client.connect();
-
-    //
-    //
-    // =========
-    // ANIMATION
-    // =========    
-    
-
-    // Hotseat stuff
-    let hotSeatUser = "";
-    let hotSeatIsOn = false;
-    //
-    
-    // Called every time a message comes in
-    function onMessageHandler(target, context, msg, self) {
-        // Remove whitespace from chat message
-        const commandName = msg.trim();
-        
-        // If the command is known, let's execute it
-
-            if (context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))) {
-                if (commandName.startsWith("!alert ")) {
-                    $("#popupbox").show();
-                    $("#popupbox").css({"background-color":alertBg}); 
-                    $("#popuptext").text(commandName.substr(7).toUpperCase());
-                    doAnimation();
-                } else if (commandName.startsWith("!delete")) {
-                  deleteAnimation();
-                } else if (commandName.startsWith("!hotseat ")) {
-                  hotSeatIsOn = true;
-                  $("#popupbox").show();
-                  hotSeatUser = commandName.substr(10).toLowerCase();
-                  $("#popupbox").css({"background-color":hotseatBg}); 
-                  $("#popuptext").text(`${hotseatEmoji}  ${hotSeatUser.toUpperCase()} IS IN THE HOTSEAT ${hotseatEmoji}`);
-                  doAnimation();
-                }
-            }
-                
-            if (hotSeatIsOn) {
-                if (context.username == hotSeatUser){
-                    $("#popuptext").text(`${hotseatEmoji} ${context['display-name']}: ${commandName} ${hotseatEmoji}`);
-                    doHotseatAnimation();
-                }
-            }
-                
-    }
-        
-    // Animate text
-    const doAnimation = () => {
-        const textWidth = $("#popuptext").width();
-        $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
-        $("#popupbox").width(1);
-        $("#popupbox").animate({width:textWidth+30}, 500);
-        $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
-    }
-    
-    const doHotseatAnimation = () => {
-        const textWidth = $("#popuptext").width();
-        $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
-        $("#popupbox").css({"background-color":hotseatBg}); 
-        $("#popupbox").width(1);
-        $("#popupbox").animate({width:textWidth+30}, 500);
-        $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
-    }
-    
-    
-        
-    // Animate off
-    const deleteAnimation = () => {
+<script type='text/javascript'>
+    const config = {
+        channels: ['fripp03'],
+        prefix: '!',
+        alertBg: '#00AA00',
+        hotseatBg: '#aa1100',
+        hotseatEmoji: '🔥',
+      };
+      
+      // Animate text
+      const doAnimation = () => {
+        const textWidth = $('#popuptext').width();
+        $('#popuptext').css({ opacity: 0, 'margin-left': '50px' });
+        $('#popupbox').width(1);
+        $('#popupbox').animate({ width: textWidth + 30 }, 500);
+        $('#popuptext').animate({ opacity: 1, 'margin-left': '15px' }, 700);
+      };
+      
+      const doHotseatAnimation = () => {
+        const textWidth = $('#popuptext').width();
+        $('#popuptext').css({ opacity: 0, 'margin-left': '50px' });
+        $('#popupbox').css({ 'background-color': config.hotseatBg });
+        $('#popupbox').width(1);
+        $('#popupbox').animate({ width: textWidth + 30 }, 500);
+        $('#popuptext').animate({ opacity: 1, 'margin-left': '15px' }, 700);
+      };
+      
+      // Animate off
+      const deleteAnimation = () => {
         hotSeatIsOn = false;
-        $("#popupbox").animate({width:0}, 500);
-        $("#popuptext").animate({"opacity":0, "margin-left":"50px"}, 700);
-    }
-    
-
-    function onConnectedHandler (addr, port) {
+        $('#popupbox').animate({ width: 0 }, 500);
+        $('#popuptext').animate({ opacity: 0, 'margin-left': '50px' }, 700);
+      };
+      
+      // Create a client with our options defined at the top of the file
+      const client = new tmi.client({ connection: { reconnect: true }, channels: config.channels });
+      
+      
+      let hotSeatUser = '';
+      let hotSeatIsOn = false;
+      
+      // Called every time a message comes in
+      const onMessageHandler = (target, context, msg, self) => {
+        if (hotSeatIsOn) {
+          if (context.username === hotSeatUser) {
+            $('#popuptext').text(`${config.hotseatEmoji} ${context['display-name']}: ${msg} ${config.hotseatEmoji}`);
+            doHotseatAnimation();
+          }
+        }
+      
+        if (!msg.startsWith(config.prefix) || (!context.mod && !context.badges.broadcaster)) return;
+      
+        // slices prefix and splits message into array !alert hello there => ['alert', 'hello', 'there']
+        const args = msg.slice(config.prefix.length).split(/ +/);
+        const command = args.shift().toLowerCase();
+      
+        if (command === 'alert') {
+          $('#popupbox').show();
+          $('#popupbox').css({ 'background-color': config.alertBg });
+          $('#popuptext').text(args.join(' '));
+          doAnimation();
+        }
+      
+        if (command === 'hotseat') {
+          hotSeatIsOn = true;
+          $('#popupbox').show();
+          hotSeatUser = args.join(' ');
+          $('#popupbox').css({ 'background-color': config.hotseatBg });
+          $('#popuptext').text(`${config.hotseatEmoji}  ${hotSeatUser.toUpperCase()} IS IN THE HOTSEAT ${config.hotseatEmoji}`);
+          doAnimation();
+        }
+      
+        if (command === 'delete') deleteAnimation();
+      };
+      
+      const onConnectedHandler = (addr, port) => {
         console.log(`* Connected to ${addr}:${port}`);
-    }
+      };
+      
+      // Register our event handlers (defined above)
+      client.on('message', onMessageHandler);
+      client.on('connected', onConnectedHandler);
+      
+      client.connect();
+      
 </script>
 </html>
