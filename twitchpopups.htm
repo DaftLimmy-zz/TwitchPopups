@@ -14,7 +14,7 @@
         const hotseatBg = '#aa1100';
 
         // The emoji that surrounds the hotseat messages.
-        const hotseatEmoji = '🔥';
+        const hotseatEmoji = '??';
 
 				// Allow twitch emotes, can be true or false.
 				const twitchEmotes = true;
@@ -157,23 +157,23 @@
         $("#popuptext").animate({"opacity":0, "margin-left":"50px"}, 700);
     }
     
-    function formatEmotes(message, emotes) {
+    const formatEmotes = (message, emotes) => {
 		  //parse the message for html and remove any tags
-      var newMessage = $($.parseHTML(message)).text().toUpperCase().split("");
+      let newMessage = $($.parseHTML(message)).text().toUpperCase().split("");
 
 			//replace any twitch emotes in the message with img tags for those emotes
       if(twitchEmotes){
         for (var emoteIndex in emotes) {
-          var emote = emotes[emoteIndex];
+          const emote = emotes[emoteIndex];
           for (var charIndexes in emote) {
-            var emoteIndexes = emote[charIndexes];
+            let emoteIndexes = emote[charIndexes];
             if (typeof emoteIndexes == "string") {
               emoteIndexes = emoteIndexes.split("-");
               emoteIndexes = [parseInt(emoteIndexes[0]), parseInt(emoteIndexes[1])];
               for (var i = emoteIndexes[0]; i <= emoteIndexes[1]; ++i) {
                 newMessage[i] = "";
               }
-              newMessage[emoteIndexes[0]] = "<img class=\"emoticon\" src=\"https://static-cdn.jtvnw.net/emoticons/v1/" + emoteIndex + "/3.0\">";
+              newMessage[emoteIndexes[0]] = `<img class="emoticon" src="https://static-cdn.jtvnw.net/emoticons/v1/${emoteIndex}/3.0"/>`;
             }
           }
         }
