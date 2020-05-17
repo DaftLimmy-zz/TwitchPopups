@@ -17,7 +17,7 @@
         const hotseatEmoji = '🔥';
 
         // Start displaying timed messages as soon as the source is added? '!timed on', '!timed true' or '!timed start' will start them if not.
-        const timedMessagesAtStart = true;
+        const timedMessagesAtStart = false;
 
         // The timed messages to rotate through displaying
         const timedMessages = ['Timed message 1',
@@ -133,12 +133,12 @@
 
             } else if (commandName.startsWith("!timed ")) {
                 let argument = commandName.substr(7).toLowerCase();
-                if ($.inArray(argument, ['off', 'false', 'stop']) > -1) {
+                if (argument == 'off') {
                     if (timedInterval) {
                         clearInterval(timedInterval);
                         timedInterval = false;
                     }
-                } else if ($.inArray(argument, ['on', 'true', 'start']) > -1) {
+                } else if (argument == 'on') {
                     if (!timedInterval) {
                         timedInterval = timedOn();
                     }
