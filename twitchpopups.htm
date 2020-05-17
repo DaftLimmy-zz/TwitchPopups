@@ -106,7 +106,7 @@
         if (command === 'hotseat') {
           hotSeatIsOn = true;
           $('#popupbox').show();
-          hotSeatUser = args.join(' ');
+          hotSeatUser = args.join(' ').replace('@', '');
           $('#popupbox').css({ 'background-color': config.hotseatBg });
           $('#popuptext').text(`${config.hotseatEmoji}  ${hotSeatUser.toUpperCase()} IS IN THE HOTSEAT ${config.hotseatEmoji}`);
           doAnimation();
