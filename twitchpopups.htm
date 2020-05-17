@@ -7,7 +7,7 @@
         // Change Limmy to your Twitch channel
         const twitchChannel = 'Limmy';
 
-        // Your alert background. Default is a vibrant green
+        // Your alert background. Default is a vibrant green.
         const alertBg = '#00AA00';
 
         // Hotseat background colour. Default is a fiery, fiery orange.
@@ -15,6 +15,20 @@
 
         // The emoji that surrounds the hotseat messages.
         const hotseatEmoji = '🔥';
+
+        // Start displaying timed messages as soon as the source is added? '!timed on' will start them if not.
+        const timedMessagesAtStart = false;
+
+        // The timed messages to rotate through displaying
+        const timedMessages = ['Timed message 1',
+                               'Timed message 2',
+                               'Timed message 3'];
+
+        // Display each timed message for this many seconds
+        const timedDisplaySeconds = 3;
+
+        // Wait this many seconds after removing a timed message to display another one
+        const timedGapSeconds = 3;
 
         // Follow the instructions in README.md
         
@@ -46,7 +60,6 @@
 			height: 82px;
 			overflow: hidden;
 		}
-		
 	</style>
 
 </head>
@@ -80,21 +93,25 @@
     //
     // =========
     // ANIMATION
-    // =========    
-    
+    // =========
 
     // Hotseat stuff
     let hotSeatUser = "";
     let hotSeatIsOn = false;
-    //
+
+    let timedInterval = false;
+    let timedMessagesCurrent = 0;
+    if (timedMessagesAtStart == true) {
+        timedInterval = timedOn();
+    }
     
     // Called every time a message comes in
     function onMessageHandler(target, context, msg, self) {
+
         // Remove whitespace from chat message
         const commandName = msg.trim();
         
         // If the command is known, let's execute it
-
             if (context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))) {
                 if (commandName.startsWith("!alert ")) {
                     $("#popupbox").show();
@@ -103,6 +120,7 @@
                     doAnimation();
                 } else if (commandName.startsWith("!delete")) {
                   deleteAnimation();
+                  $("#popuptext").text('');
                 } else if (commandName.startsWith("!hotseat ")) {
                   hotSeatIsOn = true;
                   $("#popupbox").show();
@@ -110,6 +128,18 @@
                   $("#popupbox").css({"background-color":hotseatBg}); 
                   $("#popuptext").text(`${hotseatEmoji} ${hotSeatUser.toUpperCase()} IS IN THE HOTSEAT ${hotseatEmoji}`);
                   doAnimation();
+                }  else if (commandName.startsWith("!timed ")) {
+                    let argument = commandName.substr(7).toLowerCase();
+                    if (argument == 'off') {
+                        if (timedInterval) {
+                            clearInterval(timedInterval);
+                            timedInterval = false;
+                        }
+                    } else if (argument == 'on') {
+                        if (!timedInterval) {
+                            timedInterval = timedOn();
+                        }
+                    }
                 }
             }
                 
@@ -140,16 +170,37 @@
         $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
     }
     
-    
-        
     // Animate off
     const deleteAnimation = () => {
         hotSeatIsOn = false;
         $("#popupbox").animate({width:0}, 500);
         $("#popuptext").animate({"opacity":0, "margin-left":"50px"}, 700);
     }
-    
 
+    // Start displaying and deleting timed messages
+    function timedOn() {
+        return setInterval(function() {
+            if ($("#popuptext").text() == '') {
+                $("#popupbox").show();
+                $("#popupbox").css({"background-color":alertBg}); 
+                $("#popuptext").text(timedMessages[timedMessagesCurrent]);
+                doAnimation();
+
+                setTimeout(function() {
+                    if ($("#popuptext").text() == timedMessages[timedMessagesCurrent]) {
+                        deleteAnimation();
+                        $("#popuptext").text('');
+                        if (timedMessagesCurrent < (timedMessages.length - 1)) {
+                            timedMessagesCurrent++;
+                        } else {
+                            timedMessagesCurrent = 0;
+                        }
+                    }
+                }, timedDisplaySeconds * 1000);
+            }
+        }, (timedGapSeconds + timedDisplaySeconds) * 1000);
+    }
+    
     function onConnectedHandler (addr, port) {
         console.log(`* Connected to ${addr}:${port}`);
     }
