@@ -18,7 +18,7 @@
         const hotseatEmoji = '🔥';
 
         // Follow the instructions in README.md
-        
+
     </script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -34,24 +34,13 @@
 			overflow: hidden;
 		}
 
-		#popuptext {
-		    display: inline-block;
-			font-family: 'Open Sans Condensed';
-			font-weight: 700;
-			color: white;
-			font-size: 60px;
-			margin: 0;
-			padding: 0 15px;
-			background-color: #00AA00;
-			text-transform: uppercase;
-		}
-
 		#popupbox {
 			position: absolute;
 			bottom: 20px;
 			left: 20px;
 			right: 20px;
-			transform: translateY(calc(100% + 20px));
+			overflow: hidden;
+			transform: translate3d(0, calc(100% + 20px), 0);
 			opacity: 0;
 			transition: all .4s ease-out;
 		}
@@ -59,6 +48,21 @@
 		#popupbox.show {
 			transform: none;
 			opacity: 1;
+		}
+
+		#popuptext {
+			display: inline-block;
+			white-space: nowrap;
+			font-family: 'Open Sans Condensed';
+			font-weight: 700;
+			color: white;
+			font-size: 60px;
+			margin: 0;
+			padding: 0 15px;
+		}
+
+		#popuptext.scrolling {
+			animation: marquee 5s linear infinite alternate;
 		}
 	</style>
 
@@ -99,9 +103,10 @@
     // Hotseat stuff
     let hotSeatUser = "";
     let hotSeatIsOn = false;
-    var showing = false;
-    var popupBox = document.getElementById('popupbox');
-    var popupText = document.getElementById('popuptext');
+    const popupBox = document.getElementById('popupbox');
+    const popupText = document.getElementById('popuptext');
+    const marqueeStylesheet = document.createElement('style');
+    document.head.appendChild(marqueeStylesheet);
 
     // Called every time a message comes in
     function onMessageHandler(target, context, msg, self) {
@@ -113,7 +118,7 @@
             if (context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))) {
                 if (commandName.startsWith("!alert ")) {
                     popupText.style.backgroundColor = alertBg;
-                    popupText.innerText = commandName.substr(7);
+                    setText(commandName.substr(7).toUpperCase());
                     doAnimation();
                 } else if (commandName.startsWith("!delete")) {
                   deleteAnimation();
@@ -121,20 +126,38 @@
                   hotSeatIsOn = true;
                   hotSeatUser = commandName.replace(/!hotseat @?/, '').toLowerCase();
                   popupText.style.backgroundColor = hotseatBg;
-                  popupText.innerText = `${hotseatEmoji} ${hotSeatUser} IS IN THE HOTSEAT ${hotseatEmoji}`;
+                  setText(`${hotseatEmoji} ${hotSeatUser.toUpperCase()} IS IN THE HOTSEAT ${hotseatEmoji}`);
                   doAnimation();
                 }
             }
 
             if (hotSeatIsOn) {
                 if (context.username == hotSeatUser){
-                    popupText.innerText = `${hotseatEmoji} ${context['display-name']}: ${commandName} ${hotseatEmoji}`;
+                    setText(`${hotseatEmoji} ${context['display-name']}: ${commandName} ${hotseatEmoji}`);
                     doHotseatAnimation();
                 }
             }
-                
+
     }
-        
+
+    const setText = (text) => {
+        popupText.innerText = text;
+        const isOverflowing = popupText.offsetWidth > popupBox.offsetWidth;
+        // Offset at either end of the scroll so you have time to read the start and end
+        const scrollingOffset = 75;
+        if (isOverflowing) {
+            marqueeStylesheet.sheet.insertRule(`@keyframes marquee {
+                0% {
+                    transform: translate3d(${scrollingOffset}px, 0, 0);
+                }
+                100% {
+                    transform: translate3d(${popupBox.offsetWidth - popupText.offsetWidth - scrollingOffset}px, 0, 0);
+                }
+            }`, 0);
+        }
+        popupText.classList.toggle('scrolling', isOverflowing);
+    }
+
     // Animate text
     const doAnimation = () => {
         if (popupBox.classList.contains('show')) {
