@@ -164,7 +164,7 @@
             // If voting is on and the user typed somthing that can be a vote
             if (votingIsOn && /^\d+$/.test(commandName) && parseInt(commandName) <= Object.keys(options).length) {
                 let vote = parseInt(commandName);
-                // Loop over each option and see how many votes they have
+                // Make sure users can only vote for one thing
                 for (let i = 0; i < Object.keys(options).length; i++) {
                     if (i + 1 === vote) {
                         options[Object.keys(options)[i]][context.username] = true;
