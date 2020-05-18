@@ -114,12 +114,12 @@
             }
                 
             if (hotSeatIsOn) {
-                if (context.username == hotSeatUser && (!commandName.startsWith('@') || commandName.startsWith('@' + twitchChannel))) {
+                // Ignore messages that are not from "hotSeatUser" and include mentions to users that are not the streamer at the start of the message
+                if (context.username === hotSeatUser && (!commandName.startsWith('@') || commandName.startsWith('@' + twitchChannel))) {
                     $("#popuptext").text(`${hotseatEmoji} ${context['display-name']}: ${commandName} ${hotseatEmoji}`);
                     doHotseatAnimation();
                 }
             }
-                
     }
         
     // Animate text
