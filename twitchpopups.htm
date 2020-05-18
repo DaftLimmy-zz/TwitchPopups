@@ -17,7 +17,7 @@
         const hotseatEmoji = '🔥';
 
         // Follow the instructions in README.md
-        
+
     </script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,39 +26,38 @@
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Open Sans Condensed:700">
 
-	<style>
-		#popuptext {
-		    display: inline-block;
-			font-family: 'Open Sans Condensed';
-			font-weight: 700;
-			color: white;
-			font-size: 60px;
-			margin: 0;
-			margin-left: 15px;
-			white-space: nowrap;
-		}
+    <style>
+        #popuptext {
+            display: inline-block;
+            font-family: 'Open Sans Condensed';
+            font-weight: 700;
+            color: white;
+            font-size: 60px;
+            margin: 0;
+            margin-left: 15px;
+            white-space: nowrap;
+        }
 
-		#popupbox {
-			position: absolute;
-			bottom: 20px;
+        #popupbox {
+            position: absolute;
+            bottom: 20px;
             left: 20px;
-			width: 0px;
-			height: 82px;
-			overflow: hidden;
-		}
-		
-	</style>
+            width: 0px;
+            height: 82px;
+            overflow: hidden;
+        }
+    </style>
 
 </head>
 
 <body>
 
-	<div id="popupbox">
-	    <h1 id="popuptext"></h1>		
-	</div>
+    <div id="popupbox">
+        <h1 id="popuptext"></h1>
+    </div>
 
 </body>
-    
+
 <script type="text/javascript">
     const opts = {
         channels: [
@@ -80,77 +79,100 @@
     //
     // =========
     // ANIMATION
-    // =========    
-    
+    // =========
+
 
     // Hotseat stuff
     let hotSeatUser = "";
     let hotSeatIsOn = false;
     //
-    
+
     // Called every time a message comes in
     function onMessageHandler(target, context, msg, self) {
-        // Remove whitespace from chat message
-        const commandName = msg.trim();
-        
-        // If the command is known, let's execute it
+        // Extract command name from incoming message.
+        const commandName = extractCommandNameFromMsg(msg)
+        // Extract msg body from message (everything after the command name), or just the message itself if no command.
+        const msgBody = (commandName != "" ? msg.replace(`!${commandName}`, "") : msg).trim();
 
-            if (context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))) {
-                if (commandName.startsWith("!alert ")) {
+        // If the command is known and the user issuing it is either a mod or the streamer, then execute it
+        if (contextIsModOrStreamer(context)) {
+            switch (commandName.toLowerCase()) {
+                case "alert":
                     $("#popupbox").show();
-                    $("#popupbox").css({"background-color":alertBg}); 
-                    $("#popuptext").text(commandName.substr(7).toUpperCase());
+                    $("#popupbox").css({ "background-color": alertBg });
+                    $("#popuptext").text(msgBody.toUpperCase());
                     doAnimation();
-                } else if (commandName.startsWith("!delete")) {
-                  deleteAnimation();
-                } else if (commandName.startsWith("!hotseat ")) {
-                  hotSeatIsOn = true;
-                  $("#popupbox").show();
-                  hotSeatUser = commandName.substr(10).toLowerCase();
-                  $("#popupbox").css({"background-color":hotseatBg}); 
-                  $("#popuptext").text(`${hotseatEmoji}  ${hotSeatUser.toUpperCase()} IS IN THE HOTSEAT ${hotseatEmoji}`);
-                  doAnimation();
-                }
+                    break;
+                case "delete":
+                    deleteAnimation();
+                    break;
+                case "hotseat":
+                    hotSeatIsOn = true;
+                    $("#popupbox").show();
+                    hotSeatUser = msgBody;
+                    $("#popupbox").css({ "background-color": hotseatBg });
+                    $("#popuptext").text(formatHotSeatString(` ${hotSeatUser.toUpperCase()} IS IN THE HOTSEAT`));
+                    doAnimation();
+                    break;
+                default:
+                    break;
             }
-                
-            if (hotSeatIsOn) {
-                if (context.username == hotSeatUser){
-                    $("#popuptext").text(`${hotseatEmoji} ${context['display-name']}: ${commandName} ${hotseatEmoji}`);
-                    doHotseatAnimation();
-                }
+        }
+
+        // If the hot seat feature is enabled, and the user talking is the person in the hot seat, echo what they said to screen!
+        if (hotSeatIsOn) {
+            if (context.username.toLowerCase() == hotSeatUser.toLowerCase()) {
+                $("#popuptext").text(formatHotSeatString(`${context['display-name']}: ${msgBody}`));
+                doHotseatAnimation();
             }
-                
+        }
+
     }
-        
+
+
+    const extractCommandNameFromMsg = (msg) => {
+        msg = msg.trim();
+
+        let cmdName = "";
+
+        if (msg.startsWith("!")) {
+            // Get first word of message, drop first character from it.
+            cmdName = msg.split(" ")[0].substr(1);
+        }
+
+        return cmdName.trim();
+    }
+
     // Animate text
     const doAnimation = () => {
         const textWidth = $("#popuptext").width();
-        $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
+        $("#popuptext").css({ "opacity": 0, "margin-left": "50px" });
         $("#popupbox").width(1);
-        $("#popupbox").animate({width:textWidth+30}, 500);
-        $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
+        $("#popupbox").animate({ width: textWidth + 30 }, 500);
+        $("#popuptext").animate({ "opacity": 1, "margin-left": "15px" }, 700);
     }
-    
+
     const doHotseatAnimation = () => {
         const textWidth = $("#popuptext").width();
-        $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
-        $("#popupbox").css({"background-color":hotseatBg}); 
+        $("#popuptext").css({ "opacity": 0, "margin-left": "50px" });
+        $("#popupbox").css({ "background-color": hotseatBg });
         $("#popupbox").width(1);
-        $("#popupbox").animate({width:textWidth+30}, 500);
-        $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
+        $("#popupbox").animate({ width: textWidth + 30 }, 500);
+        $("#popuptext").animate({ "opacity": 1, "margin-left": "15px" }, 700);
     }
-    
-    
-        
+
     // Animate off
     const deleteAnimation = () => {
         hotSeatIsOn = false;
-        $("#popupbox").animate({width:0}, 500);
-        $("#popuptext").animate({"opacity":0, "margin-left":"50px"}, 700);
+        $("#popupbox").animate({ width: 0 }, 500);
+        $("#popuptext").animate({ "opacity": 0, "margin-left": "50px" }, 700);
     }
-    
 
-    function onConnectedHandler (addr, port) {
+    const contextIsModOrStreamer = context => (context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster")));
+
+    const formatHotSeatString = innerText => `${hotseatEmoji} ${innerText} ${hotseatEmoji}`;
+
+    function onConnectedHandler(addr, port) {
         console.log(`* Connected to ${addr}:${port}`);
     }
 </script>
