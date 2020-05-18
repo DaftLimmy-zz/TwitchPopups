@@ -22,6 +22,7 @@
     </script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="jquery-3.4.1.min.js"></script>
     <script src="tmi.min.js"></script>
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Open Sans Condensed:700">
@@ -48,10 +49,16 @@
 		#popupbox {
 			position: absolute;
 			bottom: 20px;
-            left: 20px;
+			left: 20px;
 			right: 20px;
-			transform: translateY(calc(100% + 40px));
-			transition: transform .4s ease-out;
+			transform: translateY(calc(100% + 20px));
+			opacity: 0;
+			transition: all .4s ease-out;
+		}
+
+		#popupbox.show {
+			transform: none;
+			opacity: 1;
 		}
 	</style>
 
@@ -130,17 +137,20 @@
         
     // Animate text
     const doAnimation = () => {
-        if (showing) {
-            // Re-hide without animation
-            popupBox.style.transform = '';
-            popupBox.style.transition = 'none';
-            // Trigger reflow to apply updated style
-            void popupBox.offsetWidth;
-            // Prepare to show again with animation
-            popupBox.style.transition = '';
+        if (popupBox.classList.contains('show')) {
+            resetAnimation();
         }
-        popupBox.style.transform = 'none';
-        showing = true;
+        popupBox.classList.add('show');
+    }
+
+    const resetAnimation = () => {
+        // Hide the popup box without animating it
+        popupBox.style.transition = 'none';
+        popupBox.classList.remove('show');
+        // Trigger reflow to apply the style changes above
+        void popupBox.offsetWidth;
+        // Prepare to show again with animation
+        popupBox.style.transition = '';
     }
     
     const doHotseatAnimation = () => {
@@ -151,8 +161,7 @@
     // Animate off
     const deleteAnimation = () => {
         hotSeatIsOn = false;
-        showing = false;
-        popupBox.style.transform = '';
+        popupBox.classList.remove('show');
     }
 
     function onConnectedHandler (addr, port) {
