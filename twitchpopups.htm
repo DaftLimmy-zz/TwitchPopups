@@ -96,6 +96,7 @@
     let votingIsOn = false;
     let voteTopic = "";
     let options = {};
+    const voters = {};
     //
 
     // Called every time a message comes in
@@ -130,27 +131,19 @@
                 } else if (commandName.startsWith("!vote option ")) {
                     // Then add your options
                     let option = commandName.substr(13).toUpperCase();
-                    console.log(option)
-                    options[option] = {};
+                    // Initialise each option with 0 votes
+                    options[option] = 0;
                 } else if (commandName.startsWith("!vote clear")) {
                     // Made a mistake? clear and re-add your options
-                    options = [];
+                    options = {};
                 } else if (commandName.startsWith("!vote start") && !votingIsOn) {
                     // Once options are added, start the vote!
                     votingIsOn = true;
                     $("#popuptext").text(`VOTE: ${voteTopic} 🟢`);
                 } else if (commandName.startsWith("!vote results") && votingIsOn) {
                     // Display the results and stop the vote
-                    let biggestOption = null;
-                    let biggestSize = 0;
-                    // lop through each option and store the one with the highest votes
-                    for (let i = 0; i < Object.keys(options).length; i++) {
-                        if (Object.keys(options[Object.keys(options)[i]]).length > biggestSize) {
-                            biggestOption = Object.keys(options)[i];
-                            biggestSize = Object.keys(options[Object.keys(options)[i]]).length;
-                        } 
-                    }
-                    $("#popuptext").text(`AND THE WINNER IS: ${biggestOption} 👏👏👏`);
+                    const winner = Object.entries(options).sort((a, b) => b[1] - a[1])[0][0];
+                    $("#popuptext").text(`AND THE WINNER IS: ${winner} 👏👏👏`);
                     doAnimation();
                 }
             }
@@ -163,18 +156,24 @@
             }
                 
             // If voting is on and the user typed somthing that can be understood as a vote
-            if (votingIsOn && /^\d+$/.test(commandName) && parseInt(commandName) <= Object.keys(options).length) {
-                let vote = parseInt(commandName);
-                // Make sure users can only vote for one thing
-                for (let i = 0; i < Object.keys(options).length; i++) {
-                    if (i + 1 === vote) {
-                        // Set the voted flag against the chosen option
-                        options[Object.keys(options)[i]][context.username] = true;
-                    } else if (options[Object.keys(options)[i]][context.username]) {
-                        // Remove previous answer from the array
-                        delete options[Object.keys(options)[i]][context.username];
-                    }
+            if (votingIsOn && /^\d+$/.test(commandName)) {
+                const vote = parseInt(commandName);
+                const optionsAsArray = Object.keys(options);
+                
+                // Ignore invalid votes
+                if(vote > optionsAsArray.length) return;
+
+                const voteAsIndex = vote - 1;
+                const hasVoted = !!(voters[context.username] || voters[context.username] === 0);
+
+                // If the user has voted before, remove their previous vote
+                if(hasVoted) {
+                    options[optionsAsArray[voters[context.username]]] -= 1;
                 }
+
+                // Record user's vote and add a vote to the option
+                voters[context.username] = voteAsIndex;
+                options[optionsAsArray[voteAsIndex]] += 1;
             }
     }
         
