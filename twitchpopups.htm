@@ -96,7 +96,7 @@
     let votingIsOn = false;
     let voteTopic = "";
     let options = {};
-    const voters = {};
+    let voters = {};
     //
 
     // Called every time a message comes in
@@ -136,6 +136,7 @@
                 } else if (commandName.startsWith("!vote clear")) {
                     // Made a mistake? clear and re-add your options
                     options = {};
+                    voters = {};
                 } else if (commandName.startsWith("!vote start") && !votingIsOn) {
                     // Once options are added, start the vote!
                     votingIsOn = true;
@@ -202,6 +203,7 @@
         hotSeatIsOn = false;
         votingIsOn = false;
         options = {};
+        voters = {};
         $("#popupbox").animate({width:0}, 500);
         $("#popuptext").animate({"opacity":0, "margin-left":"50px"}, 700);
     }
