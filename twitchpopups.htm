@@ -19,6 +19,9 @@
         // Voting background colour. Default is Twitch purple.
         const votingBg = '#6441a5';
 
+        // The number of options if no options are provided when voting begins. The default is 3.
+        const defaultOptionCount = 3;
+
         // Follow the instructions in README.md
         
     </script>
@@ -138,6 +141,16 @@
                     options = {};
                     voters = {};
                 } else if (commandName.startsWith("!vote start") && !votingIsOn) {
+                    // if no options were added, add the default number of options
+                    if (Object.entries(options).length === 0) {
+                        for (let i = 0; i < defaultOptionCount; i++) {
+                            // Then add your options
+                            let option = `OPTION ${i+1}`;
+                            // Initialise each option with 0 votes
+                            options[option] = 0;
+                        }
+                    }
+
                     // Once options are added, start the vote!
                     votingIsOn = true;
                     $("#popuptext").text(`VOTE: ${voteTopic} 🟢`);
