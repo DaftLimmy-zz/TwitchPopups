@@ -141,9 +141,17 @@
                     options = {};
                     voters = {};
                 } else if (commandName.startsWith("!vote start") && !votingIsOn) {
-                    // if no options were added, add the default number of options
+
+                    // If no options were added, add the default options
                     if (Object.entries(options).length === 0) {
-                        for (let i = 0; i < defaultOptionCount; i++) {
+                        let optionCount = defaultOptionCount;
+                        // If we passed in a number at the end, override the option count
+                        if (commandName.length > 11 && /^\d+$/.test(commandName.substr(11))) {
+                            optionCount = parseInt(commandName.substr(11));
+                        }
+
+                        // Create the options
+                        for (let i = 0; i < optionCount; i++) {
                             // Then add your options
                             let option = `OPTION ${i+1}`;
                             // Initialise each option with 0 votes

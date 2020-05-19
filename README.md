@@ -10,7 +10,7 @@ Allows Twitch mods to display popup text on the stream via chat commands
 - !vote topic [topic]: start of the vote process, will display the topic
 - !vote option [option]: will add an option that users can vote on, if no options are added the default amount are created e.g "OPTION 1", "OPTION 2"
 - !vote clear: clears all options
-- !vote start: allows the users to start voting
+- !vote start [defaultCountOveride]: allows the users to start voting. If followed by a number this will overide the default option count when none are set
 - !vote results: stops users from voting and shows winner
 
 ## DOWNLOAD
