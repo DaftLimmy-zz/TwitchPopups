@@ -8,10 +8,10 @@ Allows Twitch mods to display popup text on the stream via chat commands
 - !hotseat [@username]: will display the chat of the specified user from that point on
 - !delete: will delete the popup and reset voting
 - !vote [topic]: start of the vote process, will display the topic
-- !voteopt [option]: will add an option that users can vote on
-- !voteoptclear: clears all options
-- !votestart: allows the users to start voting
-- !voteresults: stops users from voting and shows winner
+- !vote option [option]: will add an option that users can vote on
+- !vote clear: clears all options
+- !vote start: allows the users to start voting
+- !vote results: stops users from voting and shows winner
 
 ## DOWNLOAD
 
