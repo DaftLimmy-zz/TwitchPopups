@@ -43,7 +43,7 @@
 
 		#popuptext img{
 				width: 70px;
-				margin-bottom: -10px;
+				margin-bottom: -11px;
 		}
 		
 		#popupbox {
@@ -124,7 +124,7 @@
             if (hotSeatIsOn) {
                 // Ignore messages that are not from "hotSeatUser" and include mentions to users that are not the streamer at the start of the message
                 if (context.username === hotSeatUser && (!commandName.startsWith('@') || commandName.startsWith('@' + twitchChannel))) {
-                    $("#popuptext").text(`${hotseatEmoji} ${context['display-name']}: ${commandName} ${hotseatEmoji}`);
+                    $("#popuptext").html(`${hotseatEmoji} ${context['display-name']}: ${formattedMessage} ${hotseatEmoji}`);
                     doHotseatAnimation();
                 }
             }
