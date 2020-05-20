@@ -116,18 +116,18 @@
                   $("#popupbox").show();
                   hotSeatUser = commandName.substr(10).toLowerCase();
                   $("#popupbox").css({"background-color":hotseatBg}); 
-                  $("#popuptext").text(`${hotseatEmoji}  ${hotSeatUser.toUpperCase()} IS IN THE HOTSEAT ${hotseatEmoji}`);
+                  $("#popuptext").text(`${hotseatEmoji} ${hotSeatUser.toUpperCase()} IS IN THE HOTSEAT ${hotseatEmoji}`);
                   doAnimation();
                 }
             }
                 
             if (hotSeatIsOn) {
-                if (context.username == hotSeatUser){
-                    $("#popuptext").html(`${hotseatEmoji} ${context['display-name']}: ${formattedMessage} ${hotseatEmoji}`);
+                // Ignore messages that are not from "hotSeatUser" and include mentions to users that are not the streamer at the start of the message
+                if (context.username === hotSeatUser && (!commandName.startsWith('@') || commandName.startsWith('@' + twitchChannel))) {
+                    $("#popuptext").text(`${hotseatEmoji} ${context['display-name']}: ${commandName} ${hotseatEmoji}`);
                     doHotseatAnimation();
                 }
             }
-                
     }
         
     // Animate text
