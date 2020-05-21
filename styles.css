@@ -1,0 +1,19 @@
+#popuptext {
+    display: inline-block;
+    font-family: 'Open Sans Condensed';
+    font-weight: 700;
+    color: white;
+    font-size: 60px;
+    margin: 0;
+    margin-left: 15px;
+    white-space: nowrap;
+}
+
+#popupbox {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 0px;
+    height: 82px;
+    overflow: hidden;
+}
