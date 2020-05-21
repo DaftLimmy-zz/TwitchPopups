@@ -5,7 +5,7 @@
     <script type="text/javascript">
 
         // Change Limmy to your Twitch channel
-        const twitchChannel = 'Limmy';
+        const defaultChannel = 'Limmy';
 
         // Your alert background. Default is a vibrant green
         const alertBg = '#00AA00';
@@ -60,6 +60,9 @@
 </body>
     
 <script type="text/javascript">
+    // If accessed via URL twitchpopups.htm#daft, use "daft" as the channel name.
+    let twitchChannel = location.hash.substring(1) || defaultChannel;
+
     const opts = {
         channels: [
             twitchChannel
