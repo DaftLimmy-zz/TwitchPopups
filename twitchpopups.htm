@@ -5,7 +5,7 @@
     <script type="text/javascript">
 
         // Change Limmy to your Twitch channel
-        const twitchChannel = 'Limmy';
+        const twitchChannel = 'Gantee';
 
         // Your alert background. Default is a vibrant green
         const alertBg = '#00AA00';
@@ -61,9 +61,9 @@
 
 <body>
 
-	<div id="popupbox">
-	    <h1 id="popuptext"></h1>		
-	</div>
+  <div id="popupbox">
+      <h1 id="popuptext"></h1>		
+  </div>
 
 </body>
     
@@ -100,14 +100,13 @@
     function onMessageHandler(target, context, msg, self) {
         // Remove whitespace from chat message
         const commandName = msg.trim();
-        const formattedMessage = formatEmotes(commandName, context.emotes)
         // If the command is known, let's execute it
 
             if (context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))) {
                 if (commandName.startsWith("!alert ")) {
                     $("#popupbox").show();
                     $("#popupbox").css({"background-color":alertBg}); 
-                    $("#popuptext").html(formattedMessage.substr(7));
+                    $("#popuptext").html(formatEmotes(commandName, context.emotes,true).substr(7));
                     doAnimation();
                 } else if (commandName.startsWith("!delete")) {
                   deleteAnimation();
@@ -124,7 +123,7 @@
             if (hotSeatIsOn) {
                 // Ignore messages that are not from "hotSeatUser" and include mentions to users that are not the streamer at the start of the message
                 if (context.username === hotSeatUser && (!commandName.startsWith('@') || commandName.startsWith('@' + twitchChannel))) {
-                    $("#popuptext").html(`${hotseatEmoji} ${context['display-name']}: ${formattedMessage} ${hotseatEmoji}`);
+                    $("#popuptext").html(`${hotseatEmoji} ${context['display-name']}: ${formatEmotes(commandName, context.emotes,false)} ${hotseatEmoji}`);
                     doHotseatAnimation();
                 }
             }
@@ -157,11 +156,15 @@
         $("#popuptext").animate({"opacity":0, "margin-left":"50px"}, 700);
     }
     
-    const formatEmotes = (message, emotes) => {
-		  //parse the message for html and remove any tags
-      let newMessage = $($.parseHTML(message)).text().toUpperCase().split("");
+    const formatEmotes = (message, emotes, upperCase) => {
+        //parse the message for html and remove any tags
+      if(upperCase){
+        message = message.toUpperCase();
+      }
+      
+      let newMessage = $($.parseHTML(message)).text().split("");
 
-			//replace any twitch emotes in the message with img tags for those emotes
+      //replace any twitch emotes in the message with img tags for those emotes
       if(twitchEmotes){
         for (let emoteIndex in emotes) {
           const emote = emotes[emoteIndex];
