@@ -61,7 +61,7 @@
     
 <script type="text/javascript">
     // If accessed via URL twitchpopups.htm#daft, use "daft" as the channel name.
-    let twitchChannel = location.hash.substring(1) || defaultChannel;
+    const twitchChannel = location.hash.substring(1) || defaultChannel;
 
     const opts = {
         channels: [
