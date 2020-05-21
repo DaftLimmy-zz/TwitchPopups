@@ -1,3 +1,4 @@
+// !alert: will display whatever text comes after the !alert command
 actionHandlers['!alert'] = {
     security: (context) => {
         return context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))

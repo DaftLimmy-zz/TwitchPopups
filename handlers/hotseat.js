@@ -1,3 +1,4 @@
+//!hotseat [@username]: will display the chat of the specified user from that point on
 var hotseatIsOn = false;
 var hotSeatUser = "";
 

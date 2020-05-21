@@ -31,11 +31,12 @@ function onMessageHandler(target, context, msg, self) {
     
     console.log(handlerName);
     
-    // check all commands
+    // Check all commands
     if (actionHandlers[handlerName] && actionHandlers[handlerName].security(context)) {
         actionHandlers[handlerName].handle(command);
     }
 
+    // Handle the rest of chat not using commands
     for (const handler of allHandlers) {
         if (handler.security(context)) {
             handler.handle(command);
