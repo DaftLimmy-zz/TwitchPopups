@@ -16,6 +16,12 @@
         // The emoji that surrounds the hotseat messages.
         const hotseatEmoji = '🔥';
 
+        // Voting background colour. Default is Twitch purple.
+        const votingBg = '#6441a5';
+
+        // The number of options if no options are provided when voting begins. The default is 3.
+        const defaultOptionCount = 3;
+
         // Follow the instructions in README.md
         
     </script>
@@ -88,6 +94,14 @@
     let hotSeatIsOn = false;
     //
     
+    // Voting stuff
+    // Voting is pretty generic, mods can set the topic and options and users can vote with option numbers in chat.
+    let votingIsOn = false;
+    let voteTopic = "";
+    let options = {};
+    let voters = {};
+    //
+
     // Called every time a message comes in
     function onMessageHandler(target, context, msg, self) {
         // Remove whitespace from chat message
@@ -102,23 +116,87 @@
                     $("#popuptext").text(commandName.substr(7).toUpperCase());
                     doAnimation();
                 } else if (commandName.startsWith("!delete")) {
-                  deleteAnimation();
+                    deleteAnimation();
                 } else if (commandName.startsWith("!hotseat ")) {
-                  hotSeatIsOn = true;
-                  $("#popupbox").show();
-                  hotSeatUser = commandName.substr(10).toLowerCase();
-                  $("#popupbox").css({"background-color":hotseatBg}); 
-                  $("#popuptext").text(`${hotseatEmoji} ${hotSeatUser.toUpperCase()} IS IN THE HOTSEAT ${hotseatEmoji}`);
-                  doAnimation();
+                    hotSeatIsOn = true;
+                    $("#popupbox").show();
+                    hotSeatUser = commandName.substr(10).toLowerCase();
+                    $("#popupbox").css({"background-color":hotseatBg}); 
+                    $("#popuptext").text(`${hotseatEmoji} ${hotSeatUser.toUpperCase()} IS IN THE HOTSEAT ${hotseatEmoji}`);
+                    doAnimation();
+                } else if (commandName.startsWith("!vote topic ")) {
+                    // Start with the topic for your vote
+                    $("#popupbox").show();
+                    voteTopic = commandName.substr(6).toUpperCase();
+                    $("#popupbox").css({"background-color": votingBg});
+                    $("#popuptext").text(`VOTE: ${voteTopic} 🔴`);
+                    doAnimation();
+                } else if (commandName.startsWith("!vote option ")) {
+                    // Then add your options
+                    let option = commandName.substr(13).toUpperCase();
+                    // Initialise each option with 0 votes
+                    options[option] = 0;
+                } else if (commandName.startsWith("!vote clear")) {
+                    // Made a mistake? clear and re-add your options
+                    options = {};
+                    voters = {};
+                } else if (commandName.startsWith("!vote start") && !votingIsOn) {
+
+                    // If no options were added, add the default options
+                    if (Object.entries(options).length === 0) {
+                        let optionCount = defaultOptionCount;
+                        // If we passed in a number at the end, override the option count
+                        if (commandName.length > 11 && /^\d+$/.test(commandName.substr(11))) {
+                            optionCount = parseInt(commandName.substr(11));
+                        }
+
+                        // Create the options
+                        for (let i = 0; i < optionCount; i++) {
+                            // Then add your options
+                            let option = `OPTION ${i+1}`;
+                            // Initialise each option with 0 votes
+                            options[option] = 0;
+                        }
+                    }
+
+                    // Once options are added, start the vote!
+                    votingIsOn = true;
+                    $("#popuptext").text(`VOTE: ${voteTopic} 🟢`);
+                } else if (commandName.startsWith("!vote results") && votingIsOn) {
+                    // Display the results and stop the vote
+                    const winner = Object.entries(options).sort((a, b) => b[1] - a[1])[0][0];
+                    $("#popuptext").text(`AND THE WINNER IS: ${winner} 👏👏👏`);
+                    doAnimation();
                 }
             }
-                
+
             if (hotSeatIsOn) {
                 // Ignore messages that are not from "hotSeatUser" and include mentions to users that are not the streamer at the start of the message
                 if (context.username === hotSeatUser && (!commandName.startsWith('@') || commandName.startsWith('@' + twitchChannel))) {
                     $("#popuptext").text(`${hotseatEmoji} ${context['display-name']}: ${commandName} ${hotseatEmoji}`);
                     doHotseatAnimation();
                 }
+            }
+                
+            // If voting is on and the user typed somthing that can be understood as a vote
+            if (votingIsOn && /^\d+$/.test(commandName)) {
+                const vote = parseInt(commandName);
+                const optionsAsArray = Object.keys(options);
+                
+                // Ignore invalid votes
+                if(vote > optionsAsArray.length) return;
+
+                const voteAsIndex = vote - 1;
+                const hasVoted = !!(voters[context.username] || voters[context.username] === 0);
+
+                // If the user has voted before, remove their previous vote
+                if(hasVoted) {
+                    options[optionsAsArray[voters[context.username]]] -= 1;
+                }
+
+                // Record user's vote and add a vote to the option
+                voters[context.username] = voteAsIndex;
+                options[optionsAsArray[voteAsIndex]] += 1;
             }
     }
         
@@ -145,6 +223,9 @@
     // Animate off
     const deleteAnimation = () => {
         hotSeatIsOn = false;
+        votingIsOn = false;
+        options = {};
+        voters = {};
         $("#popupbox").animate({width:0}, 500);
         $("#popuptext").animate({"opacity":0, "margin-left":"50px"}, 700);
     }
