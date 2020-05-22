@@ -148,11 +148,12 @@
 
     const repeat = () => {
         const elm = document.getElementsByClassName(topLevelContainerName)[0];
-        const newone = elm.cloneNode(true);
 
         // Repeat the specified number of times then call the parent to close me
         if (repetitions < repeatCount) {
-            // This retriggers the animation by replacing itself... with itself
+            const newone = elm.cloneNode(true);
+
+            // This retriggers the animation by replacing itself with its clone
             elm.parentNode.replaceChild(newone, elm);
             document.getElementsByClassName(finalAnimatorName)[0].addEventListener("webkitAnimationEnd", repeat);
             repetitions += 1;
