@@ -7,6 +7,7 @@ Allows Twitch mods to display popup text on the stream via chat commands
 - !alert: will display whatever text comes after the !alert command
 - !hotseat [@username]: will display the chat of the specified user from that point on
 - !delete: will delete the popup
+- !anim [animation-name]: Will show a popup of any animation htm file that is included in the animations folder
 
 ## DOWNLOAD
 
