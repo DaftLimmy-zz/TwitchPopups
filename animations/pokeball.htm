@@ -127,25 +127,42 @@
 
 <!-- This script is needed on every animation in order to call the parent to remove it-->
 <script>
-    const animationObject = document.getElementsByClassName("pokeball__button")[0];
-    const repeatCount = 1;
+    // =======================================
+    // CONFIG
+    // =======================================
+    // Set this as the container for the animation so the page knows what to re-add
+    const topLevelContainerName = "pokeball";
+
+    // Set this as the finat element to finish its animation so we can apture when it ends
+    const finalAnimatorName = "pokeball__button";
+
+    // The number of times you want the animation to loop
+    const repeatCount = 2;
+
+
+    // =======================================
+    // HERE BE DRAGONS (No edits below this line  unless you want it to break!)
+    // =======================================
+    const animationObject = document.getElementsByClassName(finalAnimatorName)[0];
     let repetitions = 1
 
     const repeat = () => {
-        const elm = document.getElementsByClassName("pokeball")[0];
+        const elm = document.getElementsByClassName(topLevelContainerName)[0];
         const newone = elm.cloneNode(true);
 
+        // Repeat the specified number of times then call the parent to close me
         if (repetitions < repeatCount) {
+            // This retriggers the animation by replacing itself... with itself
             elm.parentNode.replaceChild(newone, elm);
-            document.getElementsByClassName("pokeball__button")[0].addEventListener("webkitAnimationEnd", repeat);
+            document.getElementsByClassName(finalAnimatorName)[0].addEventListener("webkitAnimationEnd", repeat);
             repetitions += 1;
         } else {
-            console.log("end")
+            // Once I have ffinished all my repeats tell my parent to kill me
             window.parent.postMessage("animation-end", "*");
         }
-
     }
 
+    // Trigger the fist end capture
     animationObject.addEventListener("webkitAnimationEnd", repeat);
 </script>
 

@@ -5,13 +5,12 @@ actionHandlers['!anim'] = {
     },
     handle: (commandName) => {
         let htmlPage = commandName.substr(6);
-        console.log(htmlPage);
         document.getElementById("animation-frame").contentWindow.location.href = `animations/${htmlPage}.htm`;
     }
 };
 
+// Listen for when the animation window says its finished... then kill it.
 window.addEventListener("message", function(message) {
-    console.log("fin");
     if (message.data === "animation-end") {
         document.getElementById("animation-frame").contentWindow.location.href = ``;
     }

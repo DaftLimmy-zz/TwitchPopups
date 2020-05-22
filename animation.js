@@ -15,7 +15,6 @@ const doHotseatAnimation = () => {
     $("#popuptext").animate({ "opacity": 1, "margin-left": "15px" }, 700);
 }
 
-
 // Animate off
 const deleteAnimation = () => {
     hotSeatIsOn = false;
