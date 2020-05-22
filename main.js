@@ -23,27 +23,27 @@ function onMessageHandler(target, context, msg, self) {
     const command = msg.trim();
 
     let handlerName;
-    if(command.indexOf(" ") > -1) {
+    if (command.indexOf(" ") > -1) {
         handlerName = command.substring(0, command.indexOf(" "));
     } else {
         handlerName = command;
     }
-    
+
     console.log(handlerName);
-    
-    // Check all commands
-    if (actionHandlers[handlerName] && actionHandlers[handlerName].security(context)) {
-        actionHandlers[handlerName].handle(command);
-    }
 
     // Handle the rest of chat not using commands
     for (const handler of allHandlers) {
-        if (handler.security(context)) {
-            handler.handle(command);
+        if (handler.security(context, command)) {
+            handler.handle(context, command);
         }
+    }
+
+    // Check all commands
+    if (actionHandlers[handlerName] && actionHandlers[handlerName].security(context, command)) {
+        actionHandlers[handlerName].handle(context, command);
     }
 }
 
-function onConnectedHandler (addr, port) {
+function onConnectedHandler(addr, port) {
     console.log(`* Connected to ${addr}:${port}`);
 }

@@ -1,9 +1,9 @@
 // This delete command resets the whole pop up system
 actionHandlers['!delete'] = {
-    security: (context) => {
+    security: (context, textContent) => {
         return context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))
     },
-    handle: (commandName) => {
+    handle: (context, textContent) => {
         deleteAnimation();
     }
 };

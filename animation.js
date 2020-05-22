@@ -17,7 +17,7 @@ const doHotseatAnimation = () => {
 
 // Animate off
 const deleteAnimation = () => {
-    hotSeatIsOn = false;
+    hotSeatUser = "";
     $("#popupbox").animate({ width: 0 }, 500);
     $("#popuptext").animate({ "opacity": 0, "margin-left": "50px" }, 700);
 }
