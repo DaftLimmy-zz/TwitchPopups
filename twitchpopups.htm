@@ -73,7 +73,11 @@
     const opts = {
         channels: [
             twitchChannel
-        ]
+        ],
+        connection: {
+            secure: true,
+            reconnect: true
+        },
     };
 
     // Create a client with our options defined at the top of the file
