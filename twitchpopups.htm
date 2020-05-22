@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="jquery-3.4.1.min.js"></script>
@@ -7,20 +8,22 @@
     <script src="settings.js"></script>
     <script src="main.js"></script>
     <script src="handlers/alert.js"></script>
+    <script src="handlers/anim.js"></script>
     <script src="handlers/delete.js"></script>
     <script src="handlers/hotseat.js"></script>
     <script src="animation.js"></script>
 
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Open Sans Condensed:700">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open Sans Condensed:700">
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
 <body>
+    <iframe id="animation-frame" sandbox="allow-scripts allow-same-origin"></iframe>
 
-	<div id="popupbox">
-	    <h1 id="popuptext"></h1>		
-	</div>
+    <div id="popupbox">
+        <h1 id="popuptext"></h1>
+    </div>
 
 </body>
+
 </html>

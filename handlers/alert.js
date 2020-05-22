@@ -5,7 +5,7 @@ actionHandlers['!alert'] = {
     },
     handle: (commandName) => {
         $("#popupbox").show();
-        $("#popupbox").css({"background-color":alertBg}); 
+        $("#popupbox").css({ "background-color": alertBg });
         $("#popuptext").text(commandName.substr(7).toUpperCase());
         doAnimation();
     }
