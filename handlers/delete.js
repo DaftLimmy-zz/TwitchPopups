@@ -4,6 +4,7 @@ actionHandlers['!delete'] = {
         return context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))
     },
     handle: (context, textContent) => {
-        deleteAnimation();
+        popup.delete();
+        // TODO : loop through objects calling its own state reset function
     }
 };
