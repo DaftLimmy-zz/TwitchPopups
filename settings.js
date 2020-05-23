@@ -1,5 +1,5 @@
 // Change Limmy to your Twitch channel
-const twitchChannel = 'PeachyMelbz';
+const twitchChannel = 'Limmy';
 
 // Your alert background. Default is a vibrant green
 const alertBg = '#00AA00';
