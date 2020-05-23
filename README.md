@@ -26,10 +26,10 @@ The latest version of TwitchPopups can be found [as a zip archive here](https://
 3. Open the zip archive and open the TwitchPopups-master directory
 4. Select all of the files and drag them into your existing TwitchPopups directory. Say yes to any prompts to overwrite files but be careful not to overwrite your custom animations!
 5. Edit the configuration section at the top of twitchpopups.htm, pasting in your settings from step 1.
-6. If OBS hasn't recognised the update press the "refresh cache of current page" button in browser source properties.
+6. If OBS hasn't recognized the update press the "refresh cache of current page" button in browser source properties.
 
 ## ADVANCED: ADD CUSTOM ANIMATIONS
-Adding new animations is fairly simple if you are confident with HTML and CSS. Create a new `.htm` file in the animations folder and name is to match what you want to type to trigger animation. e.g. for `!alert example` you would create a file in the animation folder called `example.htm`.
+Adding new animations is fairly simple if you are confident with HTML and CSS. Create a new folder with a `.htm` file in the animations folder and name both to match the command is to match what you want to type to trigger animation. e.g. for `!alert example` you would create folder and file like the following `animations/example/example.htm`.
 
 Once you have created your animation file and it looks correct when you load it directly in a browser, add the following code at the bottom just above the `</html>`. Make sure you set the config to the appropriate values:
 

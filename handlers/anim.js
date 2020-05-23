@@ -5,7 +5,7 @@ actionHandlers['!anim'] = {
     },
     handle: (context, textContent) => {
         let htmlPage = textContent.substr(6);
-        document.getElementById("animation-frame").contentWindow.location.href = `animations/${htmlPage}.htm`;
+        document.getElementById("animation-frame").contentWindow.location.href = `animations/${htmlPage}/${htmlPage}.htm`;
     }
 };
 
