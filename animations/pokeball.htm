@@ -133,7 +133,7 @@
     // Set this as the container for the animation so the page knows what to re-add
     const topLevelContainerName = "pokeball";
 
-    // Set this as the finat element to finish its animation so we can apture when it ends
+    // Set this as the final element to finish its animation so we can capture when it ends
     const finalAnimatorName = "pokeball__button";
 
     // The number of times you want the animation to loop
@@ -143,22 +143,22 @@
     // =======================================
     // HERE BE DRAGONS (No edits below this line  unless you want it to break!)
     // =======================================
-    const animationObject = document.getElementsByClassName(finalAnimatorName)[0];
+    const animationObject = document.getElementsByClassName(finalAnimatorClass)[0];
     let repetitions = 1
 
     const repeat = () => {
-        const elm = document.getElementsByClassName(topLevelContainerName)[0];
+        const elm = document.getElementsByClassName(topLevelContainerClass)[0];
 
         // Repeat the specified number of times then call the parent to close me
         if (repetitions < repeatCount) {
-            const newone = elm.cloneNode(true);
+            const newOne = elm.cloneNode(true);
 
-            // This retriggers the animation by replacing itself with its clone
-            elm.parentNode.replaceChild(newone, elm);
-            document.getElementsByClassName(finalAnimatorName)[0].addEventListener("webkitAnimationEnd", repeat);
+            // This re-triggers the animation by replacing itself with its clone
+            elm.parentNode.replaceChild(newOne, elm);
+            document.getElementsByClassName(finalAnimatorClass)[0].addEventListener("webkitAnimationEnd", repeat);
             repetitions += 1;
         } else {
-            // Once I have ffinished all my repeats tell my parent to kill me
+            // Once I have finished all my repeats tell my parent to kill me
             window.parent.postMessage("animation-end", "*");
         }
     }

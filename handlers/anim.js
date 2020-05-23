@@ -9,7 +9,7 @@ actionHandlers['!anim'] = {
     }
 };
 
-// Listen for when the animation window says its finished... then kill it.
+// Listen for when the animation window says its finished... then kills it.
 window.addEventListener("message", function(message) {
     if (message.data === "animation-end") {
         document.getElementById("animation-frame").contentWindow.location.href = ``;

@@ -11,7 +11,7 @@ actionHandlers['!hotseat'] = {
     }
 };
 
-// This handler is fired when the hotseated user types somthing in chat
+// This handler is fired when the hotseated user types something in chat
 allHandlers.push({
     security: (context, textContent) => {
         return context.username === hotSeatUser && (!textContent.startsWith('@') || textContent.startsWith('@' + twitchChannel))

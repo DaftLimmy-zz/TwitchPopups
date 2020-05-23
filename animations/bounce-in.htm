@@ -164,7 +164,7 @@
     // Set this as the container for the animation so the page knows what to re-add
     const topLevelContainerClass = "element";
 
-    // Set this as the finat element to finish its animation so we can apture when it ends
+    // Set this as the final element to finish its animation so we can capture when it ends
     const finalAnimatorClass = "element";
 
     // The number of times you want the animation to loop
@@ -182,14 +182,14 @@
 
         // Repeat the specified number of times then call the parent to close me
         if (repetitions < repeatCount) {
-            const newone = elm.cloneNode(true);
+            const newOne = elm.cloneNode(true);
 
-            // This retriggers the animation by replacing itself with its clone
-            elm.parentNode.replaceChild(newone, elm);
+            // This re-triggers the animation by replacing itself with its clone
+            elm.parentNode.replaceChild(newOne, elm);
             document.getElementsByClassName(finalAnimatorClass)[0].addEventListener("webkitAnimationEnd", repeat);
             repetitions += 1;
         } else {
-            // Once I have ffinished all my repeats tell my parent to kill me
+            // Once I have finished all my repeats tell my parent to kill me
             window.parent.postMessage("animation-end", "*");
         }
     }
