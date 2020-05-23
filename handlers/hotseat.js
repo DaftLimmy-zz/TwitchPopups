@@ -1,4 +1,4 @@
-//!hotseat [@username]: will display the chat of the specified user from that point on
+// !hotseat [@username]: will display the chat of the specified user from that point on
 var hotSeatUser = "";
 
 actionHandlers['!hotseat'] = {
@@ -6,11 +6,8 @@ actionHandlers['!hotseat'] = {
         return context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))
     },
     handle: (context, textContent) => {
-        $("#popupbox").show();
         hotSeatUser = textContent.substr(10).toLowerCase();
-        $("#popupbox").css({ "background-color": hotseatBg });
-        $("#popuptext").text(`${hotseatEmoji} ${hotSeatUser.toUpperCase()} IS IN THE HOTSEAT ${hotseatEmoji}`);
-        doAnimation();
+        popup.showText(`${hotseatEmoji} ${hotSeatUser.toUpperCase()} IS IN THE HOTSEAT ${hotseatEmoji}`, hotseatBg);
     }
 };
 
@@ -20,7 +17,7 @@ allHandlers.push({
         return context.username === hotSeatUser && (!textContent.startsWith('@') || textContent.startsWith('@' + twitchChannel))
     },
     handle: (context, textContent) => {
-        $("#popuptext").html(`${hotseatEmoji} ${context['display-name']}: ${formatEmotes(textContent, context.emotes, false)} ${hotseatEmoji}`);
-        doHotseatAnimation();
+        const formattedText = popup.formatEmotes(textContent, context.emotes, true);
+        popup.showText(`${hotseatEmoji} ${context['display-name']}: ${formattedText} ${hotseatEmoji}`, hotseatBg);
     }
 });

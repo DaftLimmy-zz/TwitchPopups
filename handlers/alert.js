@@ -4,9 +4,7 @@ actionHandlers['!alert'] = {
         return context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))
     },
     handle: (context, textContent) => {
-        $("#popupbox").show();
-        $("#popupbox").css({ "background-color": alertBg });
-        $("#popuptext").html(formatEmotes(textContent, context.emotes, true).substr(7));
-        doAnimation();
+        const formattedText = popup.formatEmotes(textContent, context.emotes, true).substr(7);
+        popup.showText(formattedText, alertBg);
     }
 };
