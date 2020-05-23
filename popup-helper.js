@@ -1,6 +1,6 @@
 const popup = {
     /**
-     * Displays popup on screen
+     * Displays popup on screen with the given text and colour.
      */
     showText: (text, bgColour) => {
         $("#popupbox").show();
