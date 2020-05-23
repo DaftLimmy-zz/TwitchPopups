@@ -17,16 +17,16 @@ const popup = {
      * Removes popup from screen and resets state of all commands 
      */
     delete: () => {
-        hotSeatUser = ""; // TODO: Remove this
+        spotlightUser = ""; // TODO: Remove this
         $("#popupbox").animate({ width: 0 }, 500);
         $("#popuptext").animate({ "opacity": 0, "margin-left": "50px" }, 700);
     },
     /**
      * Formats text with emotes, This must be past only and all message un-formatted or emotes wont be replaced properly
      */
-    formatEmotes: (message, emotes, upperCase) => {
+    formatEmotes: (message, emotes, makeUpperCase) => {
         //parse the message for html and remove any tags
-        if (upperCase) {
+        if (makeUpperCase) {
             message = message.toUpperCase();
         }
 

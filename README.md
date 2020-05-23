@@ -5,7 +5,7 @@ Allows Twitch mods to display popup text on the stream via chat commands
 ## COMMAND LIST
 
 - !alert: will display whatever text comes after the !alert command
-- !hotseat [@username]: will display the chat of the specified user from that point on
+- !spotlight [@username]: will display the chat of the specified user from that point on
 - !delete: will delete the popup
 - !anim [animation-name]: will show a popup of any animation htm file that is included in the animations folder
 
@@ -83,7 +83,7 @@ If you want to add your own handlers, you will need to understand JavaScript and
 There are a few extra things to consider.
 1. Do you want is to fire based on a !command?
 2. Do you want it to fire on every chat?
-3. What security should prevent the handler being fired? e.g mod only, hotseat only etc.
+3. What security should prevent the handler being fired? e.g mod only, spotlight only etc.
 4. What should the handler do?
 
 Once you have answered those questions you are ready to add the handler.
