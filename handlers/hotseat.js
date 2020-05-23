@@ -20,7 +20,7 @@ allHandlers.push({
         return context.username === hotSeatUser && (!textContent.startsWith('@') || textContent.startsWith('@' + twitchChannel))
     },
     handle: (context, textContent) => {
-        $("#popuptext").text(`${hotseatEmoji} ${context['display-name']}: ${textContent} ${hotseatEmoji}`);
+        $("#popuptext").html(`${hotseatEmoji} ${context['display-name']}: ${formatEmotes(textContent, context.emotes, false)} ${hotseatEmoji}`);
         doHotseatAnimation();
     }
 });

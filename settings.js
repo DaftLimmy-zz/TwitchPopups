@@ -10,4 +10,7 @@ const hotseatBg = '#aa1100';
 // The emoji that surrounds the hotseat messages.
 const hotseatEmoji = '🔥';
 
+// Allow twitch emotes, can be true or false.
+const twitchEmotes = true;
+
 // Follow the instructions in README.md

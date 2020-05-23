@@ -6,7 +6,7 @@ actionHandlers['!alert'] = {
     handle: (context, textContent) => {
         $("#popupbox").show();
         $("#popupbox").css({ "background-color": alertBg });
-        $("#popuptext").text(textContent.substr(7).toUpperCase());
+        $("#popuptext").html(formatEmotes(textContent, context.emotes, true).substr(7));
         doAnimation();
     }
 };
