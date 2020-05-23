@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            *,
+            *:before,
+            *:after {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            }
+            
+            body{overflow:hidden;}
+            
+            img{
+            position:absolute;
+            }
+            
+            .splat1{            
+            animation: splat1;            
+            animation-duration: 0.20s;
+            animation-timing-function: linear;
+            }
+            .splat2{            
+            animation: splat2;            
+            animation-duration: 0.20s;
+            animation-timing-function: linear;
+            }
+            .splat3{            
+            animation: splat3;            
+            animation-duration: 0.20s;
+            animation-timing-function: linear;
+            }
+            .splat4{            
+            animation: splat4;            
+            animation-duration: 0.20s;
+            animation-timing-function: linear;
+            }
+            .splat5{            
+            animation: splat5;            
+            animation-duration: 0.20s;
+            animation-timing-function: linear;
+            }
+            .splat6{            
+            animation: splat5;            
+            animation-duration: 0.20s;
+            animation-timing-function: linear;
+            }
+            
+            @keyframes splat1 {
+            0% {transform: translateY(800px) translateX(100px) rotate(900deg);}
+            100% {transform: translateY(0) rotate(0deg);} }           
+            @keyframes splat2 {
+            0% {transform: translateY(800px) translateX(200px)  rotate(900deg);}
+            100% {transform: translateY(0) translateX(0) rotate(0deg);}      }   
+            @keyframes splat3 {
+            0% {transform: translateY(800px) translateX(400px) rotate(900deg);}
+            100% {transform: translateY(0) translateX(0) rotate(0deg);}         }
+            @keyframes splat4 {
+            0% {transform: translateY(800px) translateX(-200px) rotate(900deg);}
+            100% {transform: translateY(0) translateX(0) rotate(0deg);}         }
+            @keyframes splat5 {
+            0% {transform: translateY(800px) translateX(-400px) rotate(900deg);}
+            100% {transform: translateY(0) translateX(0) rotate(0deg);}         }
+            @keyframes splat6 {
+            0% {transform: translateY(800px) translateX(-100px) rotate(900deg);}
+            100% {transform: translateY(0) rotate(0deg);} }
+            
+            @keyframes fade{
+            from{opacity:1;}
+            to{opacity:0;}
+            }
+            
+            .fade{
+            animation: fade;            
+            animation-duration: 2s;
+            animation-timing-function: linear;
+            }
+            
+            .faded{
+            display:none;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <img class="splat1" src="tomato.png"></img>
+    </body>
+    
+    <!-- This script is needed on every animation in order to call the parent to remove it-->
+    <script>
+        document.addEventListener(        
+        "animationend", function(event){
+            if(!event.srcElement.classList.contains("fade")){
+                event.srcElement.src = "splat.png";
+                event.srcElement.classList.add('fade');
+                new Audio("splat.mp3").play();
+                }else{
+                event.srcElement.classList.add('faded');
+            }
+        });
+        
+        const elmnt = document.getElementsByTagName("img")[0];
+        
+        function getRndInteger(min, max) {
+            return Math.floor(Math.random() * (max - min + 1) ) + min;
+        }
+        
+        function splat(){
+            let fruit = elmnt.cloneNode(true);
+            fruit.setAttribute("style",`left:${getRndInteger(00,80)}vw; top:${getRndInteger(0,70)}vh; transform:rotate(${getRndInteger(0,360)}deg);`);
+            fruit.setAttribute("src","tomato.png");
+            fruit.setAttribute("class",`splat${getRndInteger(1,6)}`);
+            document.body.appendChild(fruit);
+        }
+        
+        for(i=0; i<getRndInteger(10,50);i++){
+            setTimeout(splat,getRndInteger(0,4000));
+        }
+        
+        setTimeout(function(){window.parent.postMessage("animation-end", "*")},6000);
+    </script>
+</html>
