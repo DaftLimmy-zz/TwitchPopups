@@ -1,195 +1,26 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
-
-    <script type="text/javascript">
-
-        // Change Limmy to your Twitch channel
-        const twitchChannel = 'Limmy';
-
-        // Your alert background. Default is a vibrant green
-        const alertBg = '#00AA00';
-
-        // Hotseat background colour. Default is a fiery, fiery orange.
-        const hotseatBg = '#aa1100';
-
-        // The emoji that surrounds the hotseat messages.
-        const hotseatEmoji = '🔥';
-
-        // Allow twitch emotes, can be true or false.
-        const twitchEmotes = true;
-
-        // Follow the instructions in README.md
-        
-    </script>
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
     <script src="jquery-3.4.1.min.js"></script>
     <script src="tmi.min.js"></script>
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Open Sans Condensed:700">
+    <script src="settings.js"></script>
+    <script src="main.js"></script>
+    <script src="popup-helper.js"></script>
+    <script src="handlers.js"></script>
 
-	<style>
-		#popuptext {
-		    display: inline-block;
-			font-family: 'Open Sans Condensed';
-			font-weight: 700;
-			color: white;
-			font-size: 60px;
-			margin: 0;
-			margin-left: 15px;
-			white-space: nowrap;
-		}
-
-		#popuptext img{
-			width: 70px;
-			margin-bottom: -12px;
-			margin-right: -7px;
-			margin-left: -8px;
-		}
-
-		#popupbox {
-			position: absolute;
-			bottom: 20px;
-            left: 20px;
-			width: 0px;
-			height: 82px;
-			overflow: hidden;
-		}
-		
-	</style>
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open Sans Condensed:700">
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
 <body>
 
-	<div id="popupbox">
-	    <h1 id="popuptext"></h1>		
-	</div>
+    <div id="popupbox">
+        <h1 id="popuptext"></h1>
+    </div>
 
 </body>
-    
-<script type="text/javascript">
-    const opts = {
-        channels: [
-            twitchChannel
-        ]
-    };
 
-    // Create a client with our options defined at the top of the file
-    let client = new tmi.client(opts);
-
-    // Register our event handlers (defined below)
-    client.on('message', onMessageHandler);
-    client.on('connected', onConnectedHandler);
-
-    // Connect to Twitch:
-    client.connect();
-
-    //
-    //
-    // =========
-    // ANIMATION
-    // =========    
-    
-
-    // Hotseat stuff
-    let hotSeatUser = "";
-    let hotSeatIsOn = false;
-    //
-    
-    // Called every time a message comes in
-    function onMessageHandler(target, context, msg, self) {
-        // Remove whitespace from chat message
-        const commandName = msg.trim();
-        
-        // If the command is known, let's execute it
-
-            if (context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))) {
-                if (commandName.startsWith("!alert ")) {
-                    $("#popupbox").show();
-                    $("#popupbox").css({"background-color":alertBg}); 
-                    $("#popuptext").html(formatEmotes(commandName, context.emotes,true).substr(7));
-                    doAnimation();
-                } else if (commandName.startsWith("!delete")) {
-                  deleteAnimation();
-                } else if (commandName.startsWith("!hotseat ")) {
-                  hotSeatIsOn = true;
-                  $("#popupbox").show();
-                  hotSeatUser = commandName.substr(10).toLowerCase();
-                  $("#popupbox").css({"background-color":hotseatBg}); 
-                  $("#popuptext").text(`${hotseatEmoji} ${hotSeatUser.toUpperCase()} IS IN THE HOTSEAT ${hotseatEmoji}`);
-                  doAnimation();
-                }
-            }
-                
-            if (hotSeatIsOn) {
-                // Ignore messages that are not from "hotSeatUser" and include mentions to users that are not the streamer at the start of the message
-                if (context.username === hotSeatUser && (!commandName.startsWith('@') || commandName.startsWith('@' + twitchChannel))) {
-                    $("#popuptext").html(`${hotseatEmoji} ${context['display-name']}: ${formatEmotes(commandName, context.emotes,false)} ${hotseatEmoji}`);
-                    doHotseatAnimation();
-                }
-            }
-    }
-        
-    // Animate text
-    const doAnimation = () => {
-        const textWidth = $("#popuptext").width();
-        $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
-        $("#popupbox").width(1);
-        $("#popupbox").animate({width:textWidth+30}, 500);
-        $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
-    }
-    
-    const doHotseatAnimation = () => {
-        const textWidth = $("#popuptext").width();
-        $("#popuptext").css({"opacity":0, "margin-left":"50px"}); 
-        $("#popupbox").css({"background-color":hotseatBg}); 
-        $("#popupbox").width(1);
-        $("#popupbox").animate({width:textWidth+30}, 500);
-        $("#popuptext").animate({"opacity":1, "margin-left":"15px"}, 700);
-    }
-    
-    
-        
-    // Animate off
-    const deleteAnimation = () => {
-        hotSeatIsOn = false;
-        $("#popupbox").animate({width:0}, 500);
-        $("#popuptext").animate({"opacity":0, "margin-left":"50px"}, 700);
-    }
-    
-    const formatEmotes = (message, emotes, upperCase) => {
-        //parse the message for html and remove any tags
-        if(upperCase){
-            message = message.toUpperCase();
-        }
-        
-        let newMessage = $($.parseHTML(message)).text().split("");
-        
-        //replace any twitch emotes in the message with img tags for those emotes
-        if(twitchEmotes){
-            for (let emoteIndex in emotes) {
-                const emote = emotes[emoteIndex];
-                for (let charIndexes in emote) {
-                    let emoteIndexes = emote[charIndexes];
-                    if (typeof emoteIndexes == "string") {
-                        emoteIndexes = emoteIndexes.split("-");
-                        emoteIndexes = [parseInt(emoteIndexes[0]), parseInt(emoteIndexes[1])];
-                        for (let i = emoteIndexes[0]; i <= emoteIndexes[1]; ++i) {
-                            newMessage[i] = "";
-                        }
-                        newMessage[emoteIndexes[0]] = `<img class="emoticon" src="https://static-cdn.jtvnw.net/emoticons/v1/${emoteIndex}/3.0"/>`;
-                    }
-                }
-            }
-        }
-        
-        return newMessage.join("");
-    }
-
-    function onConnectedHandler (addr, port) {
-        console.log(`* Connected to ${addr}:${port}`);
-    }
-</script>
 </html>
