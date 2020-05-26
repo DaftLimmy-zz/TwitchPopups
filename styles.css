@@ -5,7 +5,7 @@
     color: white;
     font-size: 60px;
     margin: 0;
-    margin-left: 15px;
+    padding: 0 15px;
     white-space: nowrap;
 }
 
@@ -13,9 +13,16 @@
     position: absolute;
     bottom: 20px;
     left: 20px;
-    width: 0px;
-    height: 82px;
+    right: 20px;
     overflow: hidden;
+    transform: translate3d(0, calc(100% + 20px), 0);
+    opacity: 0;
+    transition: all .4s ease-out;
+}
+
+#popupbox.show {
+    transform: none;
+    opacity: 1;
 }
 
 iframe {
@@ -28,11 +35,12 @@ iframe {
     overflow: hidden;
 }
 
-body {
+html, body {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 
 #popuptext img {
