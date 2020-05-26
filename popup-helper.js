@@ -29,16 +29,16 @@ const popup = {
             popupBox.style.backgroundColor = 'transparent';
             popupText.style.backgroundColor = bgColour;
             popupText.style.animation = 'none';
-            popup._animate();
+            popup._show();
             return;
         }
 
-        const overflow = popupText.offsetWidth - popupBox.offsetWidth
-        const animationTime =  roundTenth(scrollStartDelay + (overflow / scrollSpeed) + scrollEndDelay);
+        const overflow = popupText.offsetWidth - popupBox.offsetWidth;
+        const animationTime = roundTenth(scrollStartDelay + (overflow / scrollSpeed) + scrollEndDelay);
         const textFadeInPercent = roundTenth(scrollTextFadeTime / animationTime * 100);
         const startScrollingPercent = roundTenth(scrollStartDelay / animationTime * 100);
         const stopScrollingPercent = 100 - roundTenth(scrollEndDelay / animationTime * 100);
-        const animationName = `scroller-${Date.now()}`
+        const animationName = `scroller-${Date.now()}`;
 
         if (popupScrollStyle.sheet.cssRules.length > 0) {
             popupScrollStyle.sheet.deleteRule(0);
@@ -69,15 +69,15 @@ const popup = {
         popupBox.style.backgroundColor = bgColour;
         popupText.style.backgroundColor = 'transparent';
         popupText.style.animation = `${animationName} ${animationTime}s linear infinite`;
-        popup._animate();
+        popup._show();
     },
     /**
      * Animates display of the popup.
      */
-    _animate: () => {
+    _show: () => {
         const popupBox = document.getElementById('popupbox');
         if (popupBox.classList.contains('show')) {
-            // Hide without animation so the show animation can be replayed.
+            // Hide without transitioning so the show animation can be replayed
             popupBox.style.transition = 'none';
             popupBox.classList.remove('show');
             // Trigger reflow to apply the style changes above
