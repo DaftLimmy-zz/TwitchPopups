@@ -15,7 +15,7 @@ The latest version of TwitchPopups can be found [as a zip archive here](https://
 ## INSTRUCTIONS
 
 1. Extract the zip archive
-2. Edit twitchpopups.htm and change "Limmy" to your Twitch channel name
+2. Edit settings.js and change "Limmy" to your Twitch channel name
 3. Use OBS/Streamlabs OBS to add twitchpopups.htm as a browser source (Fit to Screen, 1920x1080)
 4. Tick "Shutdown source when not visible" in browser source properties. That way, any tweaks you make are reloaded when you toggle the visibility button
 
@@ -31,7 +31,7 @@ The latest version of TwitchPopups can be found [as a zip archive here](https://
 ## ADVANCED: ADD CUSTOM HANDLERS
 If you want to add your own handlers, you will need to understand JavaScript and the tmi.js library.
 There are a few extra things to consider.
-1. Do you want is to fire based on a !command?
+1. Do you want it to fire based on a !command?
 2. Do you want it to fire on every chat?
 3. What security should prevent the handler being fired? e.g mod only, spotlight only etc.
 4. What should the handler do?
