@@ -24,7 +24,7 @@ const popup = {
      */
     delete: () => {
         spotlightUser = ""; // TODO: Remove this
-        timer = 0; // TODO: Remove this
+        countdown = 0; // TODO: Remove this
         $("#popupbox").animate({ width: 0 }, 500);
         $("#popuptext").animate({ "opacity": 0, "margin-left": "50px" }, 700);
     },
