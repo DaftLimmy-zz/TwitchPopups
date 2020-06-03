@@ -60,8 +60,8 @@ allHandlers.push({
 // Command: !countdown <interval> <message>
 // Description: Will display a countdown on the screen with a given message
 // =======================================
-var timer = 0;
-var timerIntervalId = null;
+var countdown = 0;
+var countdownIntervalId = null;
 
 actionHandlers['!countdown'] = {
     security: (context, textContent) => {
@@ -82,33 +82,33 @@ actionHandlers['!countdown'] = {
         // Work out interval
         switch (interval.slice(-1).toLowerCase()) {
             case 's':
-                timer = parseFloat(interval.substr(0, interval.length - 1), 10);
+                countdown = parseFloat(interval.substr(0, interval.length - 1), 10);
                 break;
             case 'm':
-                timer = parseFloat(interval.substr(0, interval.length - 1), 10) * 60;
+                countdown = parseFloat(interval.substr(0, interval.length - 1), 10) * 60;
                 break;
             case 'h':
-                timer = parseFloat(interval.substr(0, interval.length - 1), 10) * 60 * 60;
+                countdown = parseFloat(interval.substr(0, interval.length - 1), 10) * 60 * 60;
                 break;
         }
 
-        // Remove the previous timer incase there is a parallel runner
-        if (timerIntervalId != null) {
-            clearInterval(timerIntervalId);
-            timerIntervalId = null;
+        // Remove the previous countdown incase there is a parallel runner
+        if (countdownIntervalId != null) {
+            clearInterval(countdownIntervalId);
+            countdownIntervalId = null;
         }
 
-        // Every second work out the timer
-        timerIntervalId = setInterval(function() {
-            hours = parseInt(timer / 60 / 60, 10);
-            minutes = parseInt((timer / 60) % 60, 10);
-            seconds = parseInt(timer % 60, 10);
+        // Every second work out the countdown
+        countdownIntervalId = setInterval(() => {
+            hours = parseInt(countdown / 60 / 60, 10);
+            minutes = parseInt((countdown / 60) % 60, 10);
+            seconds = parseInt(countdown % 60, 10);
             hours = hours < 10 ? "0" + hours : hours;
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
 
-            if (--timer < 0) {
-                clearInterval(timerIntervalId);
+            if (--countdown < 0) {
+                clearInterval(countdownIntervalId);
                 popup.showText(message + countdownCompleteMessage, alertBg, first);
             } else {
                 if (hours > 0) {

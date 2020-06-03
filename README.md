@@ -6,6 +6,7 @@ Allows Twitch mods to display popup text on the stream via chat commands
 
 - !alert: will display whatever text comes after the !alert command
 - !spotlight [@username]: will display the chat of the specified user from that point on
+- !countdown [?interval] [?message]: will display a constant countdown with an optional message. The interval is a number followed by a single letter e.g 10m = 10 minutes, 1.5h = 1 hour and 30 minutes, 100s = 100 seconds. Interval is optional and if not set it will use the default interval in the settings.
 - !delete: will delete the popup
 
 ## DOWNLOAD
