@@ -1,5 +1,5 @@
 // Change Limmy to your Twitch channel
-const twitchChannel = 'Limmy';
+const twitchChannel = 'PeachyMelbz';
 
 // Your alert background. Default is a vibrant green
 const alertBg = '#00AA00';
@@ -12,5 +12,8 @@ const spotlightEmoji = '⭐';
 
 // Allow twitch emotes, can be true or false.
 const twitchEmotes = true;
+
+// Message to display when countdown finishes.
+const countdownCompleteMessage = 'It\'s Time!';
 
 // Follow the instructions in README.md
