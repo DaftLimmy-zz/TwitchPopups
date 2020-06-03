@@ -55,3 +55,72 @@ allHandlers.push({
         popup.showText(`${spotlightEmoji} ${context['display-name']}: ${formattedText}`, spotlightBg);
     }
 });
+
+// =======================================
+// Command: !countdown <interval> <message>
+// Description: Will display a countdown on the screen with a given message
+// =======================================
+var countdown = 0;
+var countdownIntervalId = null;
+
+actionHandlers['!countdown'] = {
+    security: (context, textContent) => {
+        return context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))
+    },
+    handle: (context, textContent) => {
+        var hours, minutes, seconds, first = true;
+
+        // Pull from message
+        const input = popup.formatEmotes(textContent, context.emotes, false).split(" ");
+        const interval = input[1] || countdownDefaultInterval;
+        var message = input.length >= 2 ? input.slice(2, input.length).join(" ") : "";
+
+        if (message.length > 0) {
+            message = message + ': ';
+        }
+
+        // Work out interval
+        switch (interval.slice(-1).toLowerCase()) {
+            case 's':
+                countdown = parseFloat(interval.substr(0, interval.length - 1), 10);
+                break;
+            case 'm':
+                countdown = parseFloat(interval.substr(0, interval.length - 1), 10) * 60;
+                break;
+            case 'h':
+                countdown = parseFloat(interval.substr(0, interval.length - 1), 10) * 60 * 60;
+                break;
+        }
+
+        // Remove the previous countdown incase there is a parallel runner
+        if (countdownIntervalId != null) {
+            clearInterval(countdownIntervalId);
+            countdownIntervalId = null;
+        }
+
+        // Every second work out the countdown
+        countdownIntervalId = setInterval(() => {
+            hours = parseInt(countdown / 60 / 60, 10);
+            minutes = parseInt((countdown / 60) % 60, 10);
+            seconds = parseInt(countdown % 60, 10);
+            hours = hours < 10 ? "0" + hours : hours;
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            if (--countdown < 0) {
+                clearInterval(countdownIntervalId);
+                popup.showText(message + countdownCompleteMessage, alertBg, first);
+            } else {
+                if (hours > 0) {
+                    popup.showText(message + hours + ":" + minutes + ":" + seconds, alertBg, first);
+                } else if (minutes > 0) {
+                    popup.showText(message + minutes + ":" + seconds, alertBg, first);
+                } else {
+                    popup.showText(message + seconds, alertBg, first);
+                }
+
+                first = false;
+            }
+        }, 1000);
+    }
+};

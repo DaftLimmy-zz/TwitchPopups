@@ -13,4 +13,10 @@ const spotlightEmoji = '⭐';
 // Allow twitch emotes, can be true or false.
 const twitchEmotes = true;
 
+// Message to display when countdown finishes.
+const countdownCompleteMessage = 'It\'s Time!';
+
+// Message to display when countdown finishes.
+const countdownDefaultInterval = '2m';
+
 // Follow the instructions in README.md

@@ -2,22 +2,29 @@ const popup = {
     /**
      * Displays popup on screen with the given text and colour.
      */
-    showText: (text, bgColour) => {
+    showText: (text, bgColour, runAnimation = true) => {
         $("#popupbox").show();
         $("#popuptext").html(text);
-        $("#popupbox").css({ "background-color": bgColour });
-        $("#popuptext").css({ "opacity": 0, "margin-left": "50px" });
-
         const textWidth = $("#popuptext").width();
-        $("#popupbox").width(1);
-        $("#popupbox").animate({ width: textWidth + 30 }, 500);
-        $("#popuptext").animate({ "opacity": 1, "margin-left": "15px" }, 700);
+
+        if (runAnimation) {
+            $("#popupbox").css({ "background-color": bgColour });
+            $("#popuptext").css({ "opacity": 0, "margin-left": "50px" });
+
+            $("#popupbox").width(1);
+            $("#popupbox").animate({ width: textWidth + 30 }, 500);
+            $("#popuptext").animate({ "opacity": 1, "margin-left": "15px" }, 700);
+        } else {
+            $("#popuptext").css({ "opacity": 1, "margin-left": "15px" });
+            $("#popupbox").width(textWidth + 30);
+        }
     },
     /**
      * Removes popup from screen and resets state of all commands 
      */
     delete: () => {
         spotlightUser = ""; // TODO: Remove this
+        countdown = 0; // TODO: Remove this
         $("#popupbox").animate({ width: 0 }, 500);
         $("#popuptext").animate({ "opacity": 0, "margin-left": "50px" }, 700);
     },
