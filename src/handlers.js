@@ -72,7 +72,7 @@ actionHandlers['!countdown'] = {
 
         // Pull from message
         const input = popup.formatEmotes(textContent, context.emotes, false).split(" ");
-        const interval = input[1] || "2m";
+        const interval = input[1] || countdownDefaultInterval;
         var message = input.length >= 2 ? input.slice(2, input.length).join(" ") : "";
 
         if (message.length > 0) {
