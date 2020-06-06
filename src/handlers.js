@@ -9,6 +9,7 @@ actionHandlers['!alert'] = {
     handle: (context, textContent) => {
         const formattedText = popup.formatEmotes(textContent, context.emotes, true).substr(7);
         popup.showText(formattedText, alertBg);
+        if (isAlertSound) new Audio(alertSoundFile).play();
     }
 };
 
