@@ -39,7 +39,7 @@ actionHandlers['!spotlight'] = {
         return context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))
     },
     handle: (context, textContent) => {
-        spotlightUser = textContent.substr(12).toLowerCase();
+        spotlightUser = textContent.substr(11).toLowerCase();
         popup.showText(`${spotlightEmoji} Welcome ${spotlightUser} to the stage!`, spotlightBg);
     }
 };
