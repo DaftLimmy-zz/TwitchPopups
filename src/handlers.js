@@ -30,6 +30,18 @@ actionHandlers['!delete'] = {
     }
 };
 
+// =======================================
+// Command: !amazon
+// Description: will display the standard amazon alert with no sound (as not to distract the old man)
+// =======================================
+actionHandlers['!amazon'] = {
+    security: (context, textContent) => {
+        return context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))
+    },
+    handle: (context, textContent) => {
+        popup.showText("imGlitch gaming.amazon.com imGlitch", alertBg);
+    }
+};
 
 // =======================================
 // Command: !spotlight
