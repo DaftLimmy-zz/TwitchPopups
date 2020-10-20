@@ -15,7 +15,6 @@ actionHandlers['!alert'] = {
     }
 };
 
-
 // =======================================
 // Command: !delete
 // Description: This delete command resets the whole pop up system
@@ -39,7 +38,11 @@ actionHandlers['!amazon'] = {
         return context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))
     },
     handle: (context, textContent) => {
-        popup.showText("imGlitch gaming.amazon.com imGlitch", alertBg);
+		var text = "gaming.amazon.com"
+		var emote = "imGlitch"
+		var emotePositions = {112290: [`0-${emote.length - 1}`, `${text.length + emote.length + 2}-${text.length + (emote.length + emote.length + 2)}`]}
+		const formattedText = popup.formatEmotes(`${emote} ${text} ${emote}`, emotePositions, true);
+        popup.showText(formattedText, alertBg);
     }
 };
 
