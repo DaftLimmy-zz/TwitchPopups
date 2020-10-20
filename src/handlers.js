@@ -1,3 +1,12 @@
+const alertHandler = ({ isSilent }) => (context, textContent) => {
+    const formattedText = popup.formatEmotes(textContent, context.emotes, true).substr(7);
+    popup.showText(formattedText, alertBg);
+
+    if (playAlertSound && !isSilent){
+        new Audio(alertSoundFile).play();
+    }
+}
+
 // =======================================
 // Command: !alert <text>
 // Description: will display whatever text comes after the !alert command
@@ -6,13 +15,19 @@ actionHandlers['!alert'] = {
     security: (context, textContent) => {
         return context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))
     },
-    handle: (context, textContent) => {
-        const formattedText = popup.formatEmotes(textContent, context.emotes, true).substr(7);
-        popup.showText(formattedText, alertBg);
-        if (playAlertSound){
-            new Audio(alertSoundFile).play();
-        } 
-    }
+    handle: alertHandler({ isSilent: false })
+};
+
+
+// =======================================
+// Command: !alert-silent <text>
+// Description: same as !alert with no sounds
+// =======================================
+actionHandlers['!alert-silent'] = {
+    security: (context, textContent) => {
+        return context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))
+    },
+    handle: alertHandler({ isSilent: true })
 };
 
 
