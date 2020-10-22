@@ -1,11 +1,14 @@
+const securityModOrBroadcaster = (context) => {
+  const isBroadcaster = context["badges-raw"] && context["badges-raw"].startsWith("broadcaster");
+  return context.mod || isBroadcaster;
+};
+
 // =======================================
 // Command: !alert <text>
 // Description: will display whatever text comes after the !alert command
 // =======================================
 actionHandlers['!alert'] = {
-    security: (context, textContent) => {
-        return context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))
-    },
+    security: securityModOrBroadcaster,
     handle: (context, textContent) => {
         const formattedText = popup.formatEmotes(textContent, context.emotes, true).substr(7);
         popup.showText(formattedText, alertBg);
@@ -21,9 +24,7 @@ actionHandlers['!alert'] = {
 // Description: This delete command resets the whole pop up system
 // =======================================
 actionHandlers['!delete'] = {
-    security: (context, textContent) => {
-        return context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))
-    },
+    security: securityModOrBroadcaster,
     handle: (context, textContent) => {
         popup.delete();
         // TODO : loop through objects calling its own state reset function
@@ -38,9 +39,7 @@ actionHandlers['!delete'] = {
 var spotlightUser = "";
 
 actionHandlers['!spotlight'] = {
-    security: (context, textContent) => {
-        return context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))
-    },
+    security: securityModOrBroadcaster,
     handle: (context, textContent) => {
         spotlightUser = textContent.substr(12).toLowerCase();
         popup.showText(`${spotlightEmoji} Welcome ${spotlightUser} to the stage!`, spotlightBg);
