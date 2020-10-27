@@ -7,6 +7,7 @@ Allows Twitch mods to display popup text on the stream via chat commands
 - !alert: will display whatever text comes after the !alert command
 - !spotlight [@username]: will display the chat of the specified user from that point on
 - !delete: will delete the popup
+- !fuck - will play the 'what the fuck is this' audio clip
 
 ## DOWNLOAD
 

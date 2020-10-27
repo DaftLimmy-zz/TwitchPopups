@@ -1,4 +1,17 @@
 // =======================================
+// Command: !fuck <text>
+// Description: will play the 'what the fuck is this' audio clip
+// =======================================
+actionHandlers['!fuck'] = {
+    security: (context, textContent) => {
+        return context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))
+    },
+    handle: () => {
+        new Audio(whatTheFuckSoundFile).play();
+    }
+};
+
+// =======================================
 // Command: !alert <text>
 // Description: will display whatever text comes after the !alert command
 // =======================================

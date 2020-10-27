@@ -14,9 +14,10 @@ const spotlightEmoji = '⭐';
 const twitchEmotes = true;
 
 // Play a sound when the "!alert" command is used
-const playAlertSound = false;
+const playAlertSound = true;
 
 // The location of the alert sound that will be used if "playAlertSound" is true, path is relative to "twitchpopups.html"
 const alertSoundFile = "assets/sounds/alert.mp3";
+const whatTheFuckSoundFile = "assets/sounds/whatthefuckisthis.mp3";
 
 // Follow the instructions in README.md
