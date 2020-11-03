@@ -5,7 +5,7 @@ const popup = {
     showText: (text, bgColour) => {
         $("#popupbox").show();
         $("#popuptext").html(text);
-        $("#popupbox").css({ "background-color": bgColour });
+        $("#popupbox").css({ "background": bgColour });
         $("#popuptext").css({ "opacity": 0, "margin-left": "50px" });
 
         const textWidth = $("#popuptext").width();
@@ -14,7 +14,7 @@ const popup = {
         $("#popuptext").animate({ "opacity": 1, "margin-left": "15px" }, 700);
     },
     /**
-     * Removes popup from screen and resets state of all commands 
+     * Removes popup from screen and resets state of all commands
      */
     delete: () => {
         spotlightUser = ""; // TODO: Remove this
