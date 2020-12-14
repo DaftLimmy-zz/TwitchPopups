@@ -27,6 +27,9 @@ actionHandlers['!delete'] = {
     handle: (context, textContent) => {
         popup.delete();
         // TODO : loop through objects calling its own state reset function
+		if (playAlertSound){
+            new Audio(deleteSoundFile).play();
+        }
     }
 };
 
