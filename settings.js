@@ -1,5 +1,5 @@
 // Change Limmy to your Twitch channel
-const twitchChannel = 'Limmy';
+const twitchChannel = 'rcjuk';
 
 // Your alert background. Default is a vibrant green
 const alertBg = '#00AA00';
@@ -17,6 +17,6 @@ const twitchEmotes = true;
 const playAlertSound = false;
 
 // The location of the alert sound that will be used if "playAlertSound" is true, path is relative to "twitchpopups.html"
-const alertSoundFile = "assets/sounds/alert.mp3";
+const alertSoundFile = 'assets/sounds/alert.mp3';
 
 // Follow the instructions in README.md
