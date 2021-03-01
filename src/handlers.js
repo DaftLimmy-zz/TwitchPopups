@@ -77,6 +77,7 @@ actionHandlers['!gif'] = {
             url: `https://g.tenor.com/v1/random?q=${search ? search : gifDefaultSearch}&key=${gifAPIKey}&limit=20&media_filter=${gifMediaFilter}&contentfilter=${gifContentFilter}`
         }).done(data => {
             if (data.results.length === 0) {
+                gifOnScreen = false;
                 return;
             }
 
