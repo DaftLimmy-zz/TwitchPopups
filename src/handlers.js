@@ -11,7 +11,7 @@ actionHandlers['!alert'] = {
         popup.showText(formattedText, alertBg);
         if (playAlertSound){
             new Audio(alertSoundFile).play();
-        } 
+        }
     }
 };
 
@@ -27,6 +27,21 @@ actionHandlers['!delete'] = {
     handle: (context, textContent) => {
         popup.delete();
         // TODO : loop through objects calling its own state reset function
+    }
+};
+
+
+// =======================================
+// Command: !mission
+// Description: a clone of alert used to display game objectives
+// =======================================
+actionHandlers['!mission'] = {
+    security: (context, textContent) => {
+        return context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))
+    },
+    handle: (context, textContent) => {
+        const formattedText = popup.formatEmotes(textContent, context.emotes, true).substr(9);
+        popup.showText(`MISSION: ${formattedText}`, missionBg);
     }
 };
 

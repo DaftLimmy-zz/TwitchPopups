@@ -4,6 +4,9 @@ const twitchChannel = 'Limmy';
 // Your alert background. Default is a vibrant green
 const alertBg = '#00AA00';
 
+// Special alert background for mission objectives. Default is a blazing pink with transparency
+const missionBg = 'rgba(230, 11, 124, 0.75)';
+
 // Spotlight background colour. Default is a deep, rich "gold"
 const spotlightBg = '#a66600';
 
