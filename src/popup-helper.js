@@ -44,7 +44,7 @@ const popup = {
                         for (let i = emoteIndexes[0]; i <= emoteIndexes[1]; ++i) {
                             newMessage[i] = "";
                         }
-                        newMessage[emoteIndexes[0]] = `<img class="emoticon" src="https://static-cdn.jtvnw.net/emoticons/v1/${emoteIndex}/3.0"/>`;
+                        newMessage[emoteIndexes[0]] = `<img class="emoticon" src="https://static-cdn.jtvnw.net/emoticons/v2/${emoteIndex}/default/dark/3.0"/>`;
                     }
                 }
             }
