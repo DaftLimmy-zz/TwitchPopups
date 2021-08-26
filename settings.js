@@ -18,5 +18,6 @@ const playAlertSound = false;
 
 // The location of the alert sound that will be used if "playAlertSound" is true, path is relative to "twitchpopups.html"
 const alertSoundFile = "assets/sounds/alert.mp3";
+const deleteSoundFile = "assets/sounds/delete.mp3";
 
 // Follow the instructions in README.md
