@@ -15,7 +15,6 @@ actionHandlers['!alert'] = {
     }
 };
 
-
 // =======================================
 // Command: !delete
 // Description: This delete command resets the whole pop up system
@@ -30,6 +29,23 @@ actionHandlers['!delete'] = {
     }
 };
 
+// =======================================
+// Command: !amazon
+// Description: will display the standard amazon alert with no sound (as not to distract the old man)
+// =======================================
+actionHandlers['!amazon'] = {
+    security: (context, textContent) => {
+        return context.mod || (context["badges-raw"] != null && context["badges-raw"].startsWith("broadcaster"))
+    },
+    handle: (context, textContent) => {
+        const text = "gaming.amazon.com"
+        const emote = "imGlitch"
+        const emoteId = 112290
+        const emotePositions = {[emoteId]: [`0-${emote.length - 1}`, `${text.length + emote.length + 2}-${text.length + (emote.length + emote.length + 2)}`]}
+        const formattedText = popup.formatEmotes(`${emote} ${text} ${emote}`, emotePositions, true);
+        popup.showText(formattedText, alertBg);
+    }
+};
 
 // =======================================
 // Command: !spotlight
