@@ -28,7 +28,9 @@ function onMessageHandler(target, context, msg, self) {
     } else {
         handlerName = command;
     }
-
+    
+    handlerName = handlerName.toLowerCase();
+    
     console.log(handlerName);
 
     // Handle the rest of chat not using commands
